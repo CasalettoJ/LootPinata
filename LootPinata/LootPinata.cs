@@ -1,5 +1,5 @@
 ﻿using LootPinata.Engine;
-using LootPinata.Engine.States;
+using LootPinata.Engine.Menus.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -87,8 +87,6 @@ namespace LootPinata
                 {
                     this.Exit();
                 }
-
-                base.Update(gameTime);
             }
 
             base.Update(gameTime);
@@ -100,7 +98,7 @@ namespace LootPinata
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.ForestGreen);
+            GraphicsDevice.Clear(Color.Bisque);
 
             // Draw Entities
             this._spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: this._camera.CurrentMatrix);
@@ -111,11 +109,6 @@ namespace LootPinata
             this._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             this._currentState.DrawUI(this._spriteBatch, this._camera);
             this._spriteBatch.End();
-
-            // Draw Debug
-            //this._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            //this._spriteBatch.DrawString(this._debugText, "FPS: " + Math.Round((1 / (decimal)gameTime.ElapsedGameTime.TotalSeconds), 2).ToString(), new Vector2(25, 25), Color.Yellow);
-            //this._spriteBatch.End();
 
             base.Draw(gameTime);
         }

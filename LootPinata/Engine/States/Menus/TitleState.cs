@@ -1,4 +1,5 @@
-﻿using LootPinata.Engine.Levels;
+﻿using LootPinata.Engine.States;
+using LootPinata.Engine.States.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,25 +10,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LootPinata.Engine.States
+namespace LootPinata.Engine.Menus.States
 {
     public class TitleState : IState
     {
         private IState _previousState;
         private ContentManager _content;
+        private SpriteFont _titleFont;
 
         public TitleState(ContentManager content, IState previous = null)
         {
             _previousState = previous;
             _content = new ContentManager(content.ServiceProvider, content.RootDirectory);
+            _titleFont = content.Load<SpriteFont>(Constants.Fonts.TelegramaSmall);
         }
 
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
-        {
-            // Unimplemented for Title
-        }
-
-        public void SetLevel(ILevel level, Camera camera)
         {
             // Unimplemented for Title
         }
@@ -42,8 +40,7 @@ namespace LootPinata.Engine.States
 
             if (currentKey.IsKeyDown(Keys.Enter) && prevKey.IsKeyUp(Keys.Enter))
             {
-                ILevel nextLevel = new TestLevel();
-                return new PlayingState(this._content, camera, nextLevel, this);
+                return new TestLevel(this._content, camera);
             }
 
             return this;
@@ -51,7 +48,10 @@ namespace LootPinata.Engine.States
 
         public void DrawUI(SpriteBatch spriteBatch, Camera camera)
         {
-            // Unimplemented for Title
+            string titleText = "LOOT PINYATA";
+            string promptText = "Press Enter";
+            spriteBatch.DrawString(_titleFont, titleText, camera.Bounds.Center.ToVector2(), Color.DarkRed, -0.261799f, titleText.GetStringOrigin(_titleFont), 4f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(_titleFont, promptText, camera.Bounds.Center.ToVector2() + new Vector2(0, 100), Color.Black, 0f, titleText.GetStringOrigin(_titleFont), 1f, SpriteEffects.None, 0f);
         }
     }
 }
