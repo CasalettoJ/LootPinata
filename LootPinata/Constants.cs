@@ -18,6 +18,7 @@ namespace LootPinata
         {
             public static readonly string SpriteFolder = "Sprites/";
             public static readonly string Placeholder = SpriteFolder + "placeholder";
+            public static readonly string Shieldbun = SpriteFolder + "shieldbunsprite";
         }
     }
 }

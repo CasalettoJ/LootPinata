@@ -43,7 +43,7 @@ namespace LootPinata.Engine.Levels
         public void LoadLevel(ContentManager content, Camera camera)
         {
             _labelFont = content.Load<SpriteFont>(Constants.Fonts.TelegramaSmall);
-            _tileSheet = content.Load<Texture2D>(Constants.Sprites.Placeholder);
+            _tileSheet = content.Load<Texture2D>(Constants.Sprites.Shieldbun);
             this._components = new ECSContainer();
 
             #region Debug Creation
@@ -52,7 +52,7 @@ namespace LootPinata.Engine.Levels
             this._components.Positions[playerId] = new Position() { OriginPosition = new Vector2(16, 16), TileHeight = 32, TileWidth = 32 };
             this._components.Displays[playerId] = new Display()
             {
-                Color = Color.Red,
+                Color = Color.White,
                 Layer = DisplayLayer.FOREGROUND,
                 LayerDepth = 0,
                 Opacity = 1f,
@@ -60,14 +60,14 @@ namespace LootPinata.Engine.Levels
                 Rotation = 0f,
                 Scale = 1f,
                 SpriteEffect = SpriteEffects.None,
-                SpriteSource = new Rectangle(0, 0, 32, 32)
+                SpriteSource = new Rectangle(0, 0, 49, 49)
             };
 
             int id = this._components.CreateEntity( ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
             this._components.Positions[id] = new Position() { OriginPosition = new Vector2(16, 16), TileHeight = 32, TileWidth = 32 };
             this._components.Displays[id] = new Display()
             {
-                Color = Color.Blue,
+                Color = Color.White,
                 Layer = DisplayLayer.FOREGROUND,
                 LayerDepth = 0,
                 Opacity = 1f,
@@ -75,7 +75,7 @@ namespace LootPinata.Engine.Levels
                 Rotation = 0f,
                 Scale = 1f,
                 SpriteEffect = SpriteEffects.None,
-                SpriteSource = new Rectangle(0, 0, 32, 32)
+                SpriteSource = new Rectangle(0, 0, 49, 49)
             };
             this._components.Labels[id] = new Label()
             {
@@ -94,26 +94,26 @@ namespace LootPinata.Engine.Levels
             this._components.Positions[id] = new Position() { OriginPosition = new Vector2(26, 600), TileHeight = 32, TileWidth = 32 };
             this._components.Displays[id] = new Display()
             {
-                Color = Color.Blue,
+                Color = Color.White,
                 Layer = DisplayLayer.FOREGROUND,
                 LayerDepth = 0,
                 Opacity = 1f,
                 Origin = new Vector2(16, 16),
                 Rotation = 0f,
-                Scale = 1f,
+                Scale = 3f,
                 SpriteEffect = SpriteEffects.None,
-                SpriteSource = new Rectangle(0, 0, 32, 32)
+                SpriteSource = new Rectangle(0, 0, 49, 49)
             };
             this._components.Labels[id] = new Label()
             {
                 Color = Color.Black,
-                Displacement = new Vector2(0, -5),
+                Displacement = new Vector2(0, -20),
                 Origin = new Vector2(16, 16),
                 DistanceRenderBuffer = 100,
-                Rotation = 0f,
-                Scale = 1f,
+                Rotation = 25f,
+                Scale = 3f,
                 SpriteEffect = SpriteEffects.None,
-                Text = "Fuck Off!",
+                Text = "Big nyan",
                 WhenToShow = WhenToShowLabel.PLAYER_CLOSE
             };
 
@@ -121,7 +121,7 @@ namespace LootPinata.Engine.Levels
             this._components.Positions[id] = new Position() { OriginPosition = new Vector2(500, 10), TileHeight = 32, TileWidth = 32 };
             this._components.Displays[id] = new Display()
             {
-                Color = Color.Blue,
+                Color = Color.White,
                 Layer = DisplayLayer.FOREGROUND,
                 LayerDepth = 0,
                 Opacity = 1f,
@@ -129,7 +129,7 @@ namespace LootPinata.Engine.Levels
                 Rotation = 0f,
                 Scale = 1f,
                 SpriteEffect = SpriteEffects.None,
-                SpriteSource = new Rectangle(0, 0, 32, 32)
+                SpriteSource = new Rectangle(0, 0, 49, 49)
             };
             this._components.Labels[id] = new Label()
             {
@@ -140,7 +140,7 @@ namespace LootPinata.Engine.Levels
                 Rotation = 0f,
                 Scale = 1f,
                 SpriteEffect = SpriteEffects.None,
-                Text = "LOUD NOISES",
+                Text = "nyan",
                 WhenToShow = WhenToShowLabel.PLAYER_FAR
             };
 
