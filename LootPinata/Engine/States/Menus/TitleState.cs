@@ -1,4 +1,5 @@
-﻿using LootPinata.Engine.States;
+﻿using LootPinata.Engine.IO.Settings;
+using LootPinata.Engine.States;
 using LootPinata.Engine.States.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -30,7 +31,7 @@ namespace LootPinata.Engine.Menus.States
             // Unimplemented for Title
         }
 
-        public IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
+        public IState UpdateState(ref GameSettings gameSettings, GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
             camera.ResetCamera();
             if (currentKey.IsKeyDown(Keys.Escape) && prevKey.IsKeyUp(Keys.Escape))

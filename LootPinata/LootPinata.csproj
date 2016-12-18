@@ -43,6 +43,8 @@
     <Compile Include="Engine\Components\Components.cs" />
     <Compile Include="Engine\Components\Entity.cs" />
     <Compile Include="Engine\Extensions\StringExtensions.cs" />
+    <Compile Include="Engine\IO\Settings\GameSettings.cs" />
+    <Compile Include="Engine\IO\Settings\SettingsIO.cs" />
     <Compile Include="Engine\States\Levels\TestLevel.cs" />
     <Compile Include="Engine\States\IState.cs" />
     <Compile Include="Engine\States\Menus\TitleState.cs" />
@@ -75,9 +77,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Engine\IO\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

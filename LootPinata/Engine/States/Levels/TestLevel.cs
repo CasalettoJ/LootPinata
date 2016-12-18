@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LootPinata.Engine.Systems;
 using LootPinata.Engine.Menus.States;
+using LootPinata.Engine.IO.Settings;
 
 namespace LootPinata.Engine.States.Levels
 {
@@ -149,7 +150,7 @@ namespace LootPinata.Engine.States.Levels
             });
         }
 
-        public IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
+        public IState UpdateState(ref GameSettings gameSettings, GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
             // Level input
             if (currentKey.IsKeyDown(Keys.Escape))

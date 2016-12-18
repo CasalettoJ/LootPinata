@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LootPinata.Engine.IO.Settings;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -11,7 +12,7 @@ namespace LootPinata.Engine.Menus.States
 {
     public interface IState
     {
-        IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse);
+        IState UpdateState(ref GameSettings gameSettings, GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse);
         void DrawContent(SpriteBatch spriteBatch, Camera camera);
         void DrawUI(SpriteBatch spriteBatch, Camera camera);
     }
