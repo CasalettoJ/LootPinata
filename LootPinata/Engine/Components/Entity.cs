@@ -12,7 +12,6 @@ namespace LootPinata.Engine.Components
         public Entity(int id, params ComponentFlags[] flags)
         {
             this.Id = id;
-            this.ComponentFlags = new BitArray(Enum.GetNames(typeof(ComponentFlags)).Length);
 
             foreach (ComponentFlags flag in flags)
             {
@@ -21,7 +20,7 @@ namespace LootPinata.Engine.Components
         }
 
         public int Id { get; }
-        public BitArray ComponentFlags { get; }
+        public BitArray ComponentFlags { get; } = new BitArray(Enum.GetNames(typeof(ComponentFlags)).Length);
     }
 
     // Extension Methods take place of Bit Masking
@@ -55,6 +54,8 @@ namespace LootPinata.Engine.Components
             return true;
         }
 
+
+        // Shortcut Extensions
         public static bool HasDrawableSprite(this Entity e)
         {
             return (e.ComponentFlags[(int)ComponentFlags.DISPLAY] && e.ComponentFlags[(int)ComponentFlags.POSITION]);

@@ -22,23 +22,21 @@ namespace LootPinata.Engine.Components
     {
         public ECSContainer()
         {
-            this.EntityCount = 0;
-            this.Entities = new List<Entity>();
-            this.Positions = new Dictionary<int, Position>();
-            this.Labels = new Dictionary<int, Label>();
-            this.Displays = new Dictionary<int, Display>();
-            this.Movements = new Dictionary<int, Movement>();
+
         }
 
         // Entities
-        public int EntityCount { get; private set; }
-        public List<Entity> Entities { get; private set; }
+        public int EntityCount { get; private set; } = 0;
+        public List<Entity> Entities { get; private set; } = new List<Entity>();
 
         // Component Arrays
-        public Dictionary<int,Position> Positions { get; private set; }
-        public Dictionary<int, Label> Labels { get; private set; }
-        public Dictionary<int, Display> Displays { get; private set; }
-        public Dictionary<int, Movement> Movements { get; private set; }
+        public Dictionary<int, Position> Positions { get; private set; } = new Dictionary<int, Position>();
+        public Dictionary<int, Label> Labels { get; private set; } = new Dictionary<int, Label>();
+        public Dictionary<int, Display> Displays { get; private set; } = new Dictionary<int, Display>();
+        public Dictionary<int, Movement> Movements { get; private set; } = new Dictionary<int, Movement>();
+
+        // Manager Properties
+        public List<Action> DelayedActions { get; private set; } = new List<Action>();
 
         public int CreateEntity(params ComponentFlags[] flags)
         {
@@ -56,7 +54,14 @@ namespace LootPinata.Engine.Components
             this.EntityCount -= 1;
         }
 
-
+        public void InvokeDelayedActions()
+        {
+            foreach (Action action in this.DelayedActions)
+            {
+                action();
+            }
+            this.DelayedActions.Clear();
+        }
     }
     #endregion
 
