@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Player xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Display>
+    <SpriteSource>
+      <X>0</X>
+      <Y>0</Y>
+      <Width>32</Width>
+      <Height>32</Height>
+      <Location>
+        <X>0</X>
+        <Y>0</Y>
+      </Location>
+      <Size>
+        <X>32</X>
+        <Y>32</Y>
+      </Size>
+    </SpriteSource>
+    <Color>
+      <B>0</B>
+      <G>0</G>
+      <R>255</R>
+      <A>255</A>
+    </Color>
+    <Scale>1</Scale>
+    <Origin>
+      <X>16</X>
+      <Y>16</Y>
+    </Origin>
+    <SpriteEffect>None</SpriteEffect>
+    <Rotation>0</Rotation>
+    <Opacity>1</Opacity>
+    <Layer>FOREGROUND</Layer>
+    <LayerDepth>0</LayerDepth>
+  </Display>
+  <Movement>
+    <BaseVelocity>300</BaseVelocity>
+    <Velocity>300</Velocity>
+    <MovementType>INPUT</MovementType>
+  </Movement>
+  <Flags>
+    <ComponentFlags>IS_PLAYER</ComponentFlags>
+    <ComponentFlags>MOVEMENT</ComponentFlags>
+    <ComponentFlags>DISPLAY</ComponentFlags>
+  </Flags>
+</Player>

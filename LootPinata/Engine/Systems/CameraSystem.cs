@@ -53,9 +53,13 @@ namespace LootPinata.Engine.Systems
         {
             Entity cameraTarget = components.Entities.Where(x => x.Id == camera.TargetEntity).FirstOrDefault();
 
-            if (cameraTarget != null && components.Positions.ContainsKey(cameraTarget.Id))
+            if (cameraTarget != null)
             {
-                SetCameraPosition(components.Positions[cameraTarget.Id], camera);
+                Position targetPosition = components.FindComponent<Position>(cameraTarget.Id);
+                if (targetPosition != null)
+                {
+                    SetCameraPosition(targetPosition, camera);
+                }
             }
         }
 

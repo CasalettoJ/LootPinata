@@ -22,7 +22,6 @@ namespace LootPinata.Engine.Components
     {
         public ECSContainer()
         {
-
         }
 
         // Entities
@@ -30,10 +29,13 @@ namespace LootPinata.Engine.Components
         public List<Entity> Entities { get; private set; } = new List<Entity>();
 
         // Component Arrays
-        public Dictionary<int, Position> Positions { get; private set; } = new Dictionary<int, Position>();
-        public Dictionary<int, Label> Labels { get; private set; } = new Dictionary<int, Label>();
-        public Dictionary<int, Display> Displays { get; private set; } = new Dictionary<int, Display>();
-        public Dictionary<int, Movement> Movements { get; private set; } = new Dictionary<int, Movement>();
+        public Dictionary<Type, Dictionary<int, dynamic>> Components = new Dictionary<Type, Dictionary<int, dynamic>>()
+        {
+            {typeof(Position), new Dictionary<int,dynamic>() },
+            {typeof(Label), new Dictionary<int,dynamic>() },
+            {typeof(Display), new Dictionary<int,dynamic>() },
+            {typeof(Movement), new Dictionary<int,dynamic>() }
+        };
 
         // Manager Properties
         public List<Action> DelayedActions { get; private set; } = new List<Action>();
@@ -44,13 +46,27 @@ namespace LootPinata.Engine.Components
             return this.EntityCount++;
         }
 
+        public void AddComponent<T>(int entityId, T component)
+        {
+            Components[component.GetType()].Add(entityId, component);
+        }
+
+        public T FindComponent<T>(int entityId)
+        {
+            if(Components[typeof(T)].ContainsKey(entityId))
+            {
+                return Components[typeof(T)][entityId];
+            }
+            return default(T);
+        }
+
         public void DestroyEntity(int entityId)
         {
             this.Entities.RemoveAt(entityId);
-            this.Positions.Remove(entityId);
-            this.Labels.Remove(entityId);
-            this.Displays.Remove(entityId);
-            this.Movements.Remove(entityId);
+            foreach(var item in Components)
+            {
+                item.Value.Remove(entityId);
+            }
             this.EntityCount -= 1;
         }
 

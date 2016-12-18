@@ -12,6 +12,10 @@ using LootPinata.Engine.Systems;
 using LootPinata.Engine.Menus.States;
 using LootPinata.Engine.IO.Settings;
 using LootPinata.Engine.States.Menus;
+using System.Xml.Serialization;
+using System.IO;
+using LootPinata.Ark.Monsters;
+using LootPinata.Engine.IO.ArkSystem;
 
 namespace LootPinata.Engine.States.Levels
 {
@@ -30,102 +34,108 @@ namespace LootPinata.Engine.States.Levels
             this._components = new ECSContainer();
 
             #region Debug Creation
-            int playerId = this._components.CreateEntity(ComponentFlags.IS_PLAYER, ComponentFlags.MOVEMENT, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
-            this._components.Movements[playerId] = new Movement() { BaseVelocity = 300, Velocity = 300, MovementType = MovementType.INPUT };
-            this._components.Positions[playerId] = new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 };
-            this._components.Displays[playerId] = new Display()
-            {
-                Color = Color.Red,
-                Layer = DisplayLayer.FOREGROUND,
-                LayerDepth = 0,
-                Opacity = 1f,
-                Origin = new Vector2(16, 16),
-                Rotation = 0f,
-                Scale = 1f,
-                SpriteEffect = SpriteEffects.None,
-                SpriteSource = new Rectangle(0, 0, 32, 32)
-            };
+            Player player = ArkCreation.CreateEntityFromFile<Player>(Constants.Ark.Monsters.Player);
+            int playerId = this._components.CreateEntity(player.Flags.ToArray());
+            this._components.Entities.Where(x => x.Id == playerId).First().AddComponentFlags(ComponentFlags.POSITION);
+            this._components.AddComponent(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
+            this._components.AddComponent(playerId, player.Display);
+            this._components.AddComponent(playerId, player.Movement);
+            //int playerId = this._components.CreateEntity(ComponentFlags.IS_PLAYER, ComponentFlags.MOVEMENT, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
+            //this._components.AddComponent(playerId, new Movement() { BaseVelocity = 300, Velocity = 300, MovementType = MovementType.INPUT });
+            //this._components.AddComponent(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
+            //this._components.AddComponent(playerId, new Display()
+            //{
+            //    Color = Color.Red,
+            //    Layer = DisplayLayer.FOREGROUND,
+            //    LayerDepth = 0,
+            //    Opacity = 1f,
+            //    Origin = new Vector2(16, 16),
+            //    Rotation = 0f,
+            //    Scale = 1f,
+            //    SpriteEffect = SpriteEffects.None,
+            //    SpriteSource = new Rectangle(0, 0, 32, 32)
+            //});
 
-            int id = this._components.CreateEntity(ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
-            this._components.Positions[id] = new Position() { OriginPosition = new Vector2(40, 16), TileHeight = 32, TileWidth = 32 };
-            this._components.Displays[id] = new Display()
-            {
-                Color = Color.Blue,
-                Layer = DisplayLayer.FOREGROUND,
-                LayerDepth = 0,
-                Opacity = 1f,
-                Origin = new Vector2(16, 16),
-                Rotation = 0f,
-                Scale = 1f,
-                SpriteEffect = SpriteEffects.None,
-                SpriteSource = new Rectangle(0, 0, 32, 32)
-            };
-            this._components.Labels[id] = new Label()
-            {
-                Color = Color.Black,
-                Displacement = new Vector2(0, -7),
-                Origin = new Vector2(16, 16),
-                DistanceRenderBuffer = 100,
-                Rotation = 0f,
-                Scale = 1f,
-                SpriteEffect = SpriteEffects.None,
-                Text = "Pssst, come here kid!",
-                WhenToShow = WhenToShowLabel.PLAYER_CLOSE
-            };
+            //int id = this._components.CreateEntity(ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
+            //this._components.Positions[id] = new Position() { OriginPosition = new Vector2(40, 16), TileHeight = 32, TileWidth = 32 };
+            //this._components.Displays[id] = new Display()
+            //{
+            //    Color = Color.Blue,
+            //    Layer = DisplayLayer.FOREGROUND,
+            //    LayerDepth = 0,
+            //    Opacity = 1f,
+            //    Origin = new Vector2(16, 16),
+            //    Rotation = 0f,
+            //    Scale = 1f,
+            //    SpriteEffect = SpriteEffects.None,
+            //    SpriteSource = new Rectangle(0, 0, 32, 32)
+            //};
+            //this._components.Labels[id] = new Label()
+            //{
+            //    Color = Color.Black,
+            //    Displacement = new Vector2(0, -7),
+            //    Origin = new Vector2(16, 16),
+            //    DistanceRenderBuffer = 100,
+            //    Rotation = 0f,
+            //    Scale = 1f,
+            //    SpriteEffect = SpriteEffects.None,
+            //    Text = "Pssst, come here kid!",
+            //    WhenToShow = WhenToShowLabel.PLAYER_CLOSE
+            //};
 
-            id = this._components.CreateEntity(ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
-            this._components.Positions[id] = new Position() { OriginPosition = new Vector2(26, 600), TileHeight = 32, TileWidth = 32 };
-            this._components.Displays[id] = new Display()
-            {
-                Color = Color.Blue,
-                Layer = DisplayLayer.FOREGROUND,
-                LayerDepth = 0,
-                Opacity = 1f,
-                Origin = new Vector2(16, 16),
-                Rotation = 0f,
-                Scale = 3f,
-                SpriteEffect = SpriteEffects.None,
-                SpriteSource = new Rectangle(0, 0, 32, 32)
-            };
-            this._components.Labels[id] = new Label()
-            {
-                Color = Color.Black,
-                Displacement = new Vector2(0, -50),
-                Origin = new Vector2(16, 16),
-                DistanceRenderBuffer = 150,
-                Rotation = 25f,
-                Scale = 3f,
-                SpriteEffect = SpriteEffects.None,
-                Text = "Big nyan",
-                WhenToShow = WhenToShowLabel.PLAYER_CLOSE
-            };
+            //id = this._components.CreateEntity(ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
+            //this._components.Positions[id] = new Position() { OriginPosition = new Vector2(26, 600), TileHeight = 32, TileWidth = 32 };
+            //this._components.Displays[id] = new Display()
+            //{
+            //    Color = Color.Blue,
+            //    Layer = DisplayLayer.FOREGROUND,
+            //    LayerDepth = 0,
+            //    Opacity = 1f,
+            //    Origin = new Vector2(16, 16),
+            //    Rotation = 0f,
+            //    Scale = 3f,
+            //    SpriteEffect = SpriteEffects.None,
+            //    SpriteSource = new Rectangle(0, 0, 32, 32)
+            //};
+            //this._components.Labels[id] = new Label()
+            //{
+            //    Color = Color.Black,
+            //    Displacement = new Vector2(0, -50),
+            //    Origin = new Vector2(16, 16),
+            //    DistanceRenderBuffer = 150,
+            //    Rotation = 25f,
+            //    Scale = 3f,
+            //    SpriteEffect = SpriteEffects.None,
+            //    Text = "Big nyan",
+            //    WhenToShow = WhenToShowLabel.PLAYER_CLOSE
+            //};
 
-            id = this._components.CreateEntity(ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
-            this._components.Positions[id] = new Position() { OriginPosition = new Vector2(500, 10), TileHeight = 32, TileWidth = 32 };
-            this._components.Displays[id] = new Display()
-            {
-                Color = Color.Blue,
-                Layer = DisplayLayer.FOREGROUND,
-                LayerDepth = 0,
-                Opacity = 1f,
-                Origin = new Vector2(16, 16),
-                Rotation = 0f,
-                Scale = 1f,
-                SpriteEffect = SpriteEffects.None,
-                SpriteSource = new Rectangle(0, 0, 32, 32)
-            };
-            this._components.Labels[id] = new Label()
-            {
-                Color = Color.Black,
-                Displacement = new Vector2(0, -5),
-                Origin = new Vector2(16, 16),
-                DistanceRenderBuffer = 100,
-                Rotation = 0f,
-                Scale = .55f,
-                SpriteEffect = SpriteEffects.None,
-                Text = "shy nyan",
-                WhenToShow = WhenToShowLabel.PLAYER_FAR
-            };
+            //id = this._components.CreateEntity(ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
+            //this._components.Positions[id] = new Position() { OriginPosition = new Vector2(500, 10), TileHeight = 32, TileWidth = 32 };
+            //this._components.Displays[id] = new Display()
+            //{
+            //    Color = Color.Blue,
+            //    Layer = DisplayLayer.FOREGROUND,
+            //    LayerDepth = 0,
+            //    Opacity = 1f,
+            //    Origin = new Vector2(16, 16),
+            //    Rotation = 0f,
+            //    Scale = 1f,
+            //    SpriteEffect = SpriteEffects.None,
+            //    SpriteSource = new Rectangle(0, 0, 32, 32)
+            //};
+            //this._components.Labels[id] = new Label()
+            //{
+            //    Color = Color.Black,
+            //    Displacement = new Vector2(0, -5),
+            //    Origin = new Vector2(16, 16),
+            //    DistanceRenderBuffer = 100,
+            //    Rotation = 0f,
+            //    Scale = .55f,
+            //    SpriteEffect = SpriteEffects.None,
+            //    Text = "shy nyan",
+            //    WhenToShow = WhenToShowLabel.PLAYER_FAR
+            //};
 
             camera.TargetEntity = this._components.Entities[playerId].Id;
             #endregion
@@ -139,7 +149,7 @@ namespace LootPinata.Engine.States.Levels
             {
                 if (c.HasDrawableSprite())
                 {
-                    DisplaySystem.DisplayEntity(spriteBatch, camera, this._components.Displays[c.Id], this._components.Positions[c.Id], this._tileSheet);
+                    DisplaySystem.DisplayEntity(spriteBatch, camera, this._components.FindComponent<Display>(c.Id), this._components.FindComponent<Position>(c.Id), this._tileSheet);
                 }
             });
 
@@ -148,7 +158,7 @@ namespace LootPinata.Engine.States.Levels
             {
                 if (c.HasDrawableLabel())
                 {
-                    DisplaySystem.DisplayLabel(spriteBatch, camera, this._components.Displays[c.Id], this._components.Labels[c.Id], this._components.Positions[c.Id], _labelFont, this._components.Positions[playerId], this._components.Displays[playerId]);
+                    DisplaySystem.DisplayLabel(spriteBatch, camera, this._components.FindComponent<Display>(c.Id), this._components.FindComponent<Label>(c.Id), this._components.FindComponent<Position>(c.Id), _labelFont, this._components.FindComponent<Position>(playerId), this._components.FindComponent<Display>(playerId));
                 }
             });
         }
@@ -170,13 +180,13 @@ namespace LootPinata.Engine.States.Levels
             {
                 if (c.IsMovable())
                 {
-                    switch (this._components.Movements[c.Id].MovementType)
+                    switch (this._components.FindComponent<Movement>(c.Id).MovementType)
                     {
                         case MovementType.AI:
                             //AI Movement System Call
                             break;
                         case MovementType.INPUT:
-                            MovementSystem.InputMovement(currentKey, prevKey, gameTime, this._components.Positions[c.Id], this._components.Movements[c.Id]);
+                            MovementSystem.InputMovement(currentKey, prevKey, gameTime, this._components.FindComponent<Position>(c.Id), this._components.FindComponent<Movement>(c.Id));
                             break;
                     }
                 }

@@ -24,7 +24,6 @@ namespace LootPinata.Engine.IO.Settings
                 XmlSerializer serializer = new XmlSerializer(newSettings.GetType());
                 using (FileStream fileStream = new FileStream(Constants.IO.GameSettings.CurrentSettings, FileMode.Open))
                 {
-                    Type objType = newSettings.GetType();
                     newSettings = (GameSettings)serializer.Deserialize(fileStream);
                 }
             }
