@@ -47,6 +47,8 @@
     <Compile Include="Engine\IO\Settings\SettingsIO.cs" />
     <Compile Include="Engine\States\Levels\TestLevel.cs" />
     <Compile Include="Engine\States\IState.cs" />
+    <Compile Include="Engine\States\Menus\PauseState.cs" />
+    <Compile Include="Engine\States\Menus\SettingsState.cs" />
     <Compile Include="Engine\States\Menus\TitleState.cs" />
     <Compile Include="Engine\Systems\CameraSystem.cs" />
     <Compile Include="Engine\Systems\DisplaySystem.cs" />

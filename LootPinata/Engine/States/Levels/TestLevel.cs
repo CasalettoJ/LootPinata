@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using LootPinata.Engine.Systems;
 using LootPinata.Engine.Menus.States;
 using LootPinata.Engine.IO.Settings;
+using LootPinata.Engine.States.Menus;
 
 namespace LootPinata.Engine.States.Levels
 {
@@ -19,11 +20,13 @@ namespace LootPinata.Engine.States.Levels
         private Texture2D _tileSheet;
         private SpriteFont _labelFont;
         private ECSContainer _components;
+        private ContentManager _content;
 
         public TestLevel(ContentManager content, Camera camera)
         {
-            _labelFont = content.Load<SpriteFont>(Constants.Fonts.TelegramaSmall);
-            _tileSheet = content.Load<Texture2D>(Constants.Sprites.Placeholder);
+            _content = new ContentManager(content.ServiceProvider, content.RootDirectory);
+            _labelFont = _content.Load<SpriteFont>(Constants.Fonts.TelegramaSmall);
+            _tileSheet = _content.Load<Texture2D>(Constants.Sprites.Placeholder);
             this._components = new ECSContainer();
 
             #region Debug Creation
@@ -153,9 +156,9 @@ namespace LootPinata.Engine.States.Levels
         public IState UpdateState(ref GameSettings gameSettings, GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
             // Level input
-            if (currentKey.IsKeyDown(Keys.Escape))
+            if (currentKey.IsKeyDown(Keys.Escape) && prevKey.IsKeyUp(Keys.Escape))
             {
-                return null;
+                return new PauseState(this._content, this);
             }
 
             // Camera Updates
