@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LootPinata.Engine.Components;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,12 +11,13 @@ namespace LootPinata.Engine.IO.ArkSystem
 {
     public static class ArkCreation
     {
-        public static T CreateEntityFromFile<T>(string xmlFilePath)
+        public static int CreateEntityFromFile(string xmlFilePath, ref ECSContainer ecsContainer)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            XmlSerializer serializer = new XmlSerializer(typeof(BaseEntity));
             using (FileStream fileStream = new FileStream(xmlFilePath, FileMode.Open))
             {
-                return (T)serializer.Deserialize(fileStream);
+                BaseEntity entity = (BaseEntity)serializer.Deserialize(fileStream);
+                return ecsContainer.AddEntity(entity);
             }
         }
     }

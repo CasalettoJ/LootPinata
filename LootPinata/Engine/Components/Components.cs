@@ -29,13 +29,10 @@ namespace LootPinata.Engine.Components
         public List<Entity> Entities { get; private set; } = new List<Entity>();
 
         // Component Arrays
-        public Dictionary<Type, Dictionary<int, dynamic>> Components = new Dictionary<Type, Dictionary<int, dynamic>>()
-        {
-            {typeof(Position), new Dictionary<int,dynamic>() },
-            {typeof(Label), new Dictionary<int,dynamic>() },
-            {typeof(Display), new Dictionary<int,dynamic>() },
-            {typeof(Movement), new Dictionary<int,dynamic>() }
-        };
+        public Dictionary<int, Position> Positions = new Dictionary<int, Position>();
+        public Dictionary<int, Display> Displays = new Dictionary<int, Display>();
+        public Dictionary<int, Movement> Movements = new Dictionary<int, Movement>();
+        public Dictionary<int, Label> Labels = new Dictionary<int, Label>();
 
         // Manager Properties
         public List<Action> DelayedActions { get; private set; } = new List<Action>();
@@ -46,27 +43,23 @@ namespace LootPinata.Engine.Components
             return this.EntityCount++;
         }
 
-        public void AddComponent<T>(int entityId, T component)
+        public int AddEntity(BaseEntity entity)
         {
-            Components[component.GetType()].Add(entityId, component);
-        }
-
-        public T FindComponent<T>(int entityId)
-        {
-            if(Components[typeof(T)].ContainsKey(entityId))
-            {
-                return Components[typeof(T)][entityId];
-            }
-            return default(T);
+            int id = this.CreateEntity(entity.Flags.ToArray());
+            if(entity.Position != null) { this.Positions.Add(id, entity.Position); }
+            if (entity.Movement != null) { this.Movements.Add(id, entity.Movement); }
+            if (entity.Label != null) { this.Labels.Add(id, entity.Label); }
+            if (entity.Display != null) { this.Displays.Add(id, entity.Display); }
+            return id;
         }
 
         public void DestroyEntity(int entityId)
         {
             this.Entities.RemoveAt(entityId);
-            foreach(var item in Components)
-            {
-                item.Value.Remove(entityId);
-            }
+            this.Positions.Remove(entityId);
+            this.Movements.Remove(entityId);
+            this.Displays.Remove(entityId);
+            this.Labels.Remove(entityId);
             this.EntityCount -= 1;
         }
 

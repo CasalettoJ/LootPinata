@@ -4,6 +4,7 @@ using LootPinata.Engine.Menus.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace LootPinata
 {
@@ -19,6 +20,7 @@ namespace LootPinata
         private Camera _camera;
         private IState _currentState;
         private GameSettings _gameSettings;
+        private SpriteFont _debugText;
 
         public LootPinata()
         {
@@ -45,8 +47,10 @@ namespace LootPinata
         /// </summary>
         protected override void LoadContent()
         {
-            _gameSettings = SettingsIO.LoadGameSettings();
+            this._gameSettings = SettingsIO.LoadGameSettings();
             this._spriteBatch = new SpriteBatch(GraphicsDevice);
+            this._debugText = Content.Load<SpriteFont>(Constants.Fonts.TelegramaSmall);
+
             this.IsMouseVisible = false;
             this.Window.IsBorderless = _gameSettings.Borderless;
             this.Window.AllowUserResizing = false;
@@ -117,6 +121,11 @@ namespace LootPinata
             // Draw UI
             this._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             this._currentState.DrawUI(this._spriteBatch, this._camera);
+            this._spriteBatch.End();
+
+            // Draw Debug
+            this._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            this._spriteBatch.DrawString(this._debugText, "FPS: " + Math.Round((1 / (decimal)gameTime.ElapsedGameTime.TotalSeconds), 2).ToString(), new Vector2(25, 25), Color.DarkBlue);
             this._spriteBatch.End();
 
             base.Draw(gameTime);

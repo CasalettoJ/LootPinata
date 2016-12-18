@@ -34,12 +34,9 @@ namespace LootPinata.Engine.States.Levels
             this._components = new ECSContainer();
 
             #region Debug Creation
-            Player player = ArkCreation.CreateEntityFromFile<Player>(Constants.Ark.Monsters.Player);
-            int playerId = this._components.CreateEntity(player.Flags.ToArray());
+            int playerId = ArkCreation.CreateEntityFromFile(Constants.Ark.Monsters.Player, ref this._components);
             this._components.Entities.Where(x => x.Id == playerId).First().AddComponentFlags(ComponentFlags.POSITION);
-            this._components.AddComponent(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
-            this._components.AddComponent(playerId, player.Display);
-            this._components.AddComponent(playerId, player.Movement);
+            this._components.Positions.Add(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
             //int playerId = this._components.CreateEntity(ComponentFlags.IS_PLAYER, ComponentFlags.MOVEMENT, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
             //this._components.AddComponent(playerId, new Movement() { BaseVelocity = 300, Velocity = 300, MovementType = MovementType.INPUT });
             //this._components.AddComponent(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
@@ -149,7 +146,7 @@ namespace LootPinata.Engine.States.Levels
             {
                 if (c.HasDrawableSprite())
                 {
-                    DisplaySystem.DisplayEntity(spriteBatch, camera, this._components.FindComponent<Display>(c.Id), this._components.FindComponent<Position>(c.Id), this._tileSheet);
+                    DisplaySystem.DisplayEntity(spriteBatch, camera, this._components.Displays[c.Id], this._components.Positions[c.Id], this._tileSheet);
                 }
             });
 
@@ -158,7 +155,7 @@ namespace LootPinata.Engine.States.Levels
             {
                 if (c.HasDrawableLabel())
                 {
-                    DisplaySystem.DisplayLabel(spriteBatch, camera, this._components.FindComponent<Display>(c.Id), this._components.FindComponent<Label>(c.Id), this._components.FindComponent<Position>(c.Id), _labelFont, this._components.FindComponent<Position>(playerId), this._components.FindComponent<Display>(playerId));
+                    DisplaySystem.DisplayLabel(spriteBatch, camera, this._components.Displays[c.Id], this._components.Labels[c.Id], this._components.Positions[c.Id], _labelFont, this._components.Positions[playerId], this._components.Displays[playerId]);
                 }
             });
         }
@@ -171,6 +168,16 @@ namespace LootPinata.Engine.States.Levels
                 return new PauseState(this._content, this);
             }
 
+            if (currentKey.IsKeyDown(Keys.F) && prevKey.IsKeyUp(Keys.F))
+            {
+                for(int i = 0; i < 1001; i++)
+                {
+                    int playerId = ArkCreation.CreateEntityFromFile(Constants.Ark.Monsters.Player, ref this._components);
+                    this._components.Entities.Where(x => x.Id == playerId).First().AddComponentFlags(ComponentFlags.POSITION);
+                    this._components.Positions.Add(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
+                }
+            }
+
             // Camera Updates
             CameraSystem.ControlCamera(currentKey, prevKey, camera, gameTime);
             CameraSystem.PanCamera(camera, gameTime);
@@ -180,13 +187,13 @@ namespace LootPinata.Engine.States.Levels
             {
                 if (c.IsMovable())
                 {
-                    switch (this._components.FindComponent<Movement>(c.Id).MovementType)
+                    switch (this._components.Movements[c.Id].MovementType)
                     {
                         case MovementType.AI:
                             //AI Movement System Call
                             break;
                         case MovementType.INPUT:
-                            MovementSystem.InputMovement(currentKey, prevKey, gameTime, this._components.FindComponent<Position>(c.Id), this._components.FindComponent<Movement>(c.Id));
+                            MovementSystem.InputMovement(currentKey, prevKey, gameTime, this._components.Positions[c.Id], this._components.Movements[c.Id]);
                             break;
                     }
                 }

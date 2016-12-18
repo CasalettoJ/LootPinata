@@ -41,6 +41,7 @@
     <Compile Include="Ark\Monsters.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Engine\Camera.cs" />
+    <Compile Include="Engine\Components\BaseEntity.cs" />
     <Compile Include="Engine\Components\Components.cs" />
     <Compile Include="Engine\Components\Entity.cs" />
     <Compile Include="Engine\Extensions\StringExtensions.cs" />

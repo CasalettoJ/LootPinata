@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Player xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<BaseEntity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Display>
     <SpriteSource>
       <X>0</X>
@@ -42,4 +42,4 @@
     <ComponentFlags>MOVEMENT</ComponentFlags>
     <ComponentFlags>DISPLAY</ComponentFlags>
   </Flags>
-</Player>
+</BaseEntity>
