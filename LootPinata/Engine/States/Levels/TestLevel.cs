@@ -148,11 +148,6 @@ namespace LootPinata.Engine.States.Levels
                 {
                     DisplaySystem.DisplayEntity(spriteBatch, camera, this._components.Displays[c.Id], this._components.Positions[c.Id], this._tileSheet);
                 }
-            });
-
-            //Draw Labels
-            this._components.Entities.ForEach((c) =>
-            {
                 if (c.HasDrawableLabel())
                 {
                     DisplaySystem.DisplayLabel(spriteBatch, camera, this._components.Displays[c.Id], this._components.Labels[c.Id], this._components.Positions[c.Id], _labelFont, this._components.Positions[playerId], this._components.Displays[playerId]);
