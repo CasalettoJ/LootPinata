@@ -15,7 +15,7 @@ namespace LootPinata.Engine
         public Vector2 Position;
         public Rectangle Bounds;
         public Vector2 TargetPosition;
-        public int TargetEntity;
+        public Guid TargetEntity;
         public Viewport FullViewport;
         public Matrix CurrentMatrix;
         public Matrix CurrentInverseMatrix;

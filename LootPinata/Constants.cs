@@ -9,6 +9,8 @@ namespace LootPinata
 {
     public static class Constants
     {
+        public static readonly Random Random = new Random();
+
         public static class Fonts
         {
             public static readonly string FontFolder = @"Fonts/";

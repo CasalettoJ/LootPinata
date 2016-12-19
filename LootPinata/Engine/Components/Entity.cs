@@ -9,7 +9,7 @@ namespace LootPinata.Engine.Components
 {
     public class Entity
     {
-        public Entity(int id, params ComponentFlags[] flags)
+        public Entity(Guid id, params ComponentFlags[] flags)
         {
             this.Id = id;
 
@@ -19,7 +19,7 @@ namespace LootPinata.Engine.Components
             }
         }
 
-        public int Id { get; }
+        public Guid Id { get; }
         public BitArray ComponentFlags { get; } = new BitArray(Enum.GetNames(typeof(ComponentFlags)).Length);
     }
 

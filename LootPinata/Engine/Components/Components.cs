@@ -15,7 +15,8 @@ namespace LootPinata.Engine.Components
         POSITION = 1,
         LABEL = 2,
         DISPLAY = 3,
-        MOVEMENT = 4
+        MOVEMENT = 4,
+        INVENTORY = 5
     }
 
     public class ECSContainer
@@ -29,56 +30,74 @@ namespace LootPinata.Engine.Components
         public List<Entity> Entities { get; private set; } = new List<Entity>();
 
         // Component Arrays
-        public Dictionary<int, Position> Positions = new Dictionary<int, Position>();
-        public Dictionary<int, Display> Displays = new Dictionary<int, Display>();
-        public Dictionary<int, Movement> Movements = new Dictionary<int, Movement>();
-        public Dictionary<int, Label> Labels = new Dictionary<int, Label>();
+        public Dictionary<Guid, Position> Positions = new Dictionary<Guid, Position>();
+        public Dictionary<Guid, Display> Displays = new Dictionary<Guid, Display>();
+        public Dictionary<Guid, Movement> Movements = new Dictionary<Guid, Movement>();
+        public Dictionary<Guid, Label> Labels = new Dictionary<Guid, Label>();
+        public Dictionary<Guid, Inventory> Inventories = new Dictionary<Guid, Inventory>();
 
         // Manager Properties
         public List<Action> DelayedActions { get; private set; } = new List<Action>();
 
-        public int CreateEntity(params ComponentFlags[] flags)
+        public Guid CreateEntity(params ComponentFlags[] flags)
         {
-            this.Entities.Insert(this.EntityCount, new Entity(this.EntityCount, flags));
-            return this.EntityCount++;
+            Guid id = Guid.NewGuid();
+            this.Entities.Add(new Entity(id, flags));
+            return id;
         }
 
-        public int AddEntity(BaseEntity entity)
+        public Guid AddEntity(BaseEntity entity)
         {
-            int id = this.CreateEntity(entity.Flags.ToArray());
+            Guid id = this.CreateEntity(entity.Flags.ToArray());
             if(entity.Position != null) { this.Positions.Add(id, entity.Position); }
             if (entity.Movement != null) { this.Movements.Add(id, entity.Movement); }
             if (entity.Label != null) { this.Labels.Add(id, entity.Label); }
             if (entity.Display != null) { this.Displays.Add(id, entity.Display); }
+            if (entity.Inventory != null) { this.Inventories.Add(id, entity.Inventory); }
             return id;
         }
 
-        public void AppendEntity(BaseEntity additions, int id)
+        public void AppendEntity(BaseEntity additions, Guid id)
         {
             Entity entity = this.Entities.Where(x => x.Id == id).First();
             if (entity != null && additions != null)
             {
                 entity.AddComponentFlags(additions.Flags.ToArray());
-                if (additions.Position != null) { this.Positions.Add(id, additions.Position); }
-                if (additions.Movement != null) { this.Movements.Add(id, additions.Movement); }
-                if (additions.Label != null) { this.Labels.Add(id, additions.Label); }
-                if (additions.Display != null) { this.Displays.Add(id, additions.Display); }
+                if (additions.Position != null) { this.Positions[id] = additions.Position; }
+                if (additions.Movement != null) { this.Movements[id] = additions.Movement; }
+                if (additions.Label != null) { this.Labels[id] = additions.Label; }
+                if (additions.Display != null) { this.Displays[id] = additions.Display; }
+                if (additions.Inventory != null) { this.Inventories[id] = additions.Inventory; }
             }
         }
 
-        public Entity GetEntity(int id)
+        public Entity GetEntity(Guid id)
         {
             return this.Entities.Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public void DestroyEntity(int entityId)
+        public void DestroyEntity(Entity removal)
         {
-            this.Entities.RemoveAt(entityId);
-            this.Positions.Remove(entityId);
-            this.Movements.Remove(entityId);
-            this.Displays.Remove(entityId);
-            this.Labels.Remove(entityId);
-            this.EntityCount -= 1;
+            this.Entities.Remove(removal);
+            this.Positions.Remove(removal.Id);
+            this.Movements.Remove(removal.Id);
+            this.Displays.Remove(removal.Id);
+            this.Labels.Remove(removal.Id);
+            this.Inventories.Remove(removal.Id);
+        }
+
+        public void DestroyEntity(Guid id)
+        {
+            Entity found = this.Entities.Where(x => x.Id == id).FirstOrDefault();
+            if (found != null)
+            {
+                this.Entities.Remove(found);
+                this.Positions.Remove(found.Id);
+                this.Movements.Remove(found.Id);
+                this.Displays.Remove(found.Id);
+                this.Labels.Remove(found.Id);
+                this.Inventories.Remove(found.Id);
+            }
         }
 
         public void InvokeDelayedActions()
@@ -148,7 +167,8 @@ namespace LootPinata.Engine.Components
     {
         NONE,
         INPUT,
-        AI
+        AI,
+        DIRECTED
     }
 
     public class Movement
@@ -156,6 +176,12 @@ namespace LootPinata.Engine.Components
         public double BaseVelocity;
         public double Velocity;
         public MovementType MovementType;
+        public Vector2 TargetPosition;
     } 
+
+    public class Inventory
+    {
+        public List<Guid> EntitiesOwned;
+    }
     #endregion
 }

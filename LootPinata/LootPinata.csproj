@@ -54,6 +54,7 @@
     <Compile Include="Engine\States\Menus\TitleState.cs" />
     <Compile Include="Engine\Systems\CameraSystem.cs" />
     <Compile Include="Engine\Systems\DisplaySystem.cs" />
+    <Compile Include="Engine\Systems\InventorySystem.cs" />
     <Compile Include="Engine\Systems\MovementSystem.cs" />
     <Compile Include="LootPinata.cs" />
     <Compile Include="Program.cs" />
