@@ -77,7 +77,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
     <Content Include="ArkContent\Monsters\Player.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ArkContent\Monsters\TestNpc.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="OpenTK.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

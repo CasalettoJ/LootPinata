@@ -78,8 +78,6 @@ namespace LootPinata.Engine.Components
     public class Position
     {
         public Vector2 OriginPosition { get; set; }
-        public int TileWidth { get; set; }
-        public int TileHeight { get; set; }
     }
 
     public enum WhenToShowLabel
@@ -103,17 +101,22 @@ namespace LootPinata.Engine.Components
         public int DistanceRenderBuffer;
     }
 
-    public enum DisplayLayer
+    public enum DisplayLayer : int
     {
-        BACKGROUND,
-        FLOOR,
-        FOREGROUND,
-        SUPER
+        BACKGROUND = 100,
+        FLOOR = 80,
+        NORMAL = 60,
+        FOREGROUND = 40,
+        SUPER = 20,
+        TOP = 0
     }
 
     public class Display
     {
-        public Rectangle SpriteSource;
+        public string SpriteSheetKey;
+        public int SpriteSheetSize;
+        public int SpriteSheetCol;
+        public int SpriteSheetRow;
         public Color Color;
         public float Scale;
         public Vector2 Origin;
@@ -121,7 +124,6 @@ namespace LootPinata.Engine.Components
         public float Rotation;
         public float Opacity;
         public DisplayLayer Layer;
-        public int LayerDepth;
     }
 
     public enum MovementType

@@ -21,18 +21,18 @@ namespace LootPinata.Engine.Systems
             {
                 camera.Scale -= .25f;
             }
-            if (currentKey.IsKeyDown(Keys.Q))
-            {
-                camera.Rotation -= 5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (currentKey.IsKeyDown(Keys.E))
-            {
-                camera.Rotation += 5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (currentKey.IsKeyDown(Keys.R))
-            {
-                camera.Rotation = 0f;
-            }
+            //if (currentKey.IsKeyDown(Keys.Q))
+            //{
+            //    camera.Rotation -= 5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //}
+            //if (currentKey.IsKeyDown(Keys.E))
+            //{
+            //    camera.Rotation += 5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //}
+            //if (currentKey.IsKeyDown(Keys.R))
+            //{
+            //    camera.Rotation = 0f;
+            //}
         }
 
         public static void PanCamera(Camera camera, GameTime gameTime)
@@ -61,13 +61,13 @@ namespace LootPinata.Engine.Systems
 
         private static void SetCameraPosition(Position positionInfo, Camera camera)
         {
-            camera.TargetPosition = positionInfo.OriginPosition + determineCenter(positionInfo);
+            camera.TargetPosition = positionInfo.OriginPosition;
         }
 
-        private static Vector2 determineCenter(Position positionInfo)
-        {
-                Rectangle objectSize = new Rectangle(0, 0, positionInfo.TileWidth, positionInfo.TileHeight);
-                return objectSize.Center.ToVector2();
-        }
+        //private static Vector2 determineCenter(Position positionInfo)
+        //{
+        //        Rectangle objectSize = new Rectangle(0, 0, positionInfo.TileWidth, positionInfo.TileHeight);
+        //        return objectSize.Center.ToVector2();
+        //}
     }
 }

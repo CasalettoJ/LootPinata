@@ -21,7 +21,7 @@ namespace LootPinata.Engine.States.Levels
 {
     public class TestLevel : IState
     {
-        private Texture2D _tileSheet;
+        private Dictionary<string, Texture2D> _spriteSheets = new Dictionary<string, Texture2D>();
         private SpriteFont _labelFont;
         private ECSContainer _components;
         private ContentManager _content;
@@ -30,13 +30,14 @@ namespace LootPinata.Engine.States.Levels
         {
             _content = new ContentManager(content.ServiceProvider, content.RootDirectory);
             _labelFont = _content.Load<SpriteFont>(Constants.Fonts.TelegramaSmall);
-            _tileSheet = _content.Load<Texture2D>(Constants.Sprites.Placeholder);
+            _spriteSheets.Add(Constants.Sprites.MonsterSheetKey, _content.Load<Texture2D>(Constants.Sprites.MonsterSheet));
+            _spriteSheets.Add(Constants.Sprites.ItemSheetKey, _content.Load<Texture2D>(Constants.Sprites.ItemSheet));
+            _spriteSheets.Add(Constants.Sprites.TileSheetKey, _content.Load<Texture2D>(Constants.Sprites.TileSheet));
             this._components = new ECSContainer();
 
             #region Debug Creation
-            int playerId = ArkCreation.CreateEntityFromFile(Constants.Ark.Monsters.Player, ref this._components);
-            this._components.Entities.Where(x => x.Id == playerId).First().AddComponentFlags(ComponentFlags.POSITION);
-            this._components.Positions.Add(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
+            int playerId = Spawners.SpawnPlayer(ref this._components, new Position() { OriginPosition = new Vector2(0, 0) });
+            Spawners.SpawnTestNpc(ref this._components, new Position() { OriginPosition = new Vector2(0, 50) });
             //int playerId = this._components.CreateEntity(ComponentFlags.IS_PLAYER, ComponentFlags.MOVEMENT, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
             //this._components.AddComponent(playerId, new Movement() { BaseVelocity = 300, Velocity = 300, MovementType = MovementType.INPUT });
             //this._components.AddComponent(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
@@ -146,7 +147,7 @@ namespace LootPinata.Engine.States.Levels
             {
                 if (c.HasDrawableSprite())
                 {
-                    DisplaySystem.DisplayEntity(spriteBatch, camera, this._components.Displays[c.Id], this._components.Positions[c.Id], this._tileSheet);
+                    DisplaySystem.DisplayEntity(spriteBatch, camera, this._components.Displays[c.Id], this._components.Positions[c.Id], this._spriteSheets[this._components.Displays[c.Id].SpriteSheetKey]);
                 }
                 if (c.HasDrawableLabel())
                 {
@@ -169,7 +170,7 @@ namespace LootPinata.Engine.States.Levels
                 {
                     int playerId = ArkCreation.CreateEntityFromFile(Constants.Ark.Monsters.Player, ref this._components);
                     this._components.Entities.Where(x => x.Id == playerId).First().AddComponentFlags(ComponentFlags.POSITION);
-                    this._components.Positions.Add(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
+                    this._components.Positions.Add(playerId, new Position() { OriginPosition = new Vector2(0, 16)});
                 }
             }
 

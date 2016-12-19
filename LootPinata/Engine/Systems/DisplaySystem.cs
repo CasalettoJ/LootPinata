@@ -13,15 +13,16 @@ namespace LootPinata.Engine.Systems
     {
         public static void DisplayEntity(SpriteBatch spriteBatch, Camera camera, Display displayInfo, Position positionInfo, Texture2D spriteSheet)
         {
-            if (positionInfo != null && displayInfo != null && camera.IsInView(GetCameraBounds(positionInfo, camera)))
+            if (positionInfo != null && displayInfo != null && camera.IsInView(GetCameraBounds(displayInfo, positionInfo, camera)))
             {
-                spriteBatch.Draw(spriteSheet, positionInfo.OriginPosition, displayInfo.SpriteSource, displayInfo.Color * displayInfo.Opacity, displayInfo.Rotation, displayInfo.Origin, displayInfo.Scale, displayInfo.SpriteEffect, 0f);
+                Rectangle spriteSource = new Rectangle(displayInfo.SpriteSheetSize * displayInfo.SpriteSheetCol, displayInfo.SpriteSheetSize * displayInfo.SpriteSheetRow, displayInfo.SpriteSheetSize, displayInfo.SpriteSheetSize);
+                spriteBatch.Draw(spriteSheet, positionInfo.OriginPosition, spriteSource, displayInfo.Color * displayInfo.Opacity, displayInfo.Rotation, displayInfo.Origin, displayInfo.Scale, displayInfo.SpriteEffect, ((float)displayInfo.Layer)/100 );
             }
         }
 
         public static void DisplayLabel(SpriteBatch spriteBatch, Camera camera, Display displayInfo, Label labelInfo, Position positionInfo, SpriteFont font, Position playerPosition, Display playerDisplay)
         {
-            if (positionInfo != null && displayInfo != null && labelInfo != null && camera.IsInView(GetCameraBounds(positionInfo, camera)))
+            if (positionInfo != null && displayInfo != null && labelInfo != null && camera.IsInView(GetCameraBounds(displayInfo, positionInfo, camera)))
             {
                 int distance = Math.Abs((int)Vector2.Distance(playerPosition.OriginPosition + playerDisplay.Origin, positionInfo.OriginPosition + displayInfo.Origin));
                 bool show = false;
@@ -46,9 +47,9 @@ namespace LootPinata.Engine.Systems
             }
         }
 
-        private static Rectangle GetCameraBounds(Position positionInfo, Camera camera)
+        private static Rectangle GetCameraBounds(Display displayInfo, Position positionInfo, Camera camera)
         {
-            Vector2 bottomRight = Vector2.Transform(new Vector2((positionInfo.OriginPosition.X) + positionInfo.TileWidth, (positionInfo.OriginPosition.Y) + positionInfo.TileHeight), camera.CurrentMatrix);
+            Vector2 bottomRight = Vector2.Transform(new Vector2((positionInfo.OriginPosition.X) + (displayInfo.SpriteSheetSize * displayInfo.Scale), (positionInfo.OriginPosition.Y) + (displayInfo.SpriteSheetSize * displayInfo.Scale)), camera.CurrentMatrix);
             Vector2 topLeft = Vector2.Transform(new Vector2(positionInfo.OriginPosition.X, positionInfo.OriginPosition.Y), camera.CurrentMatrix);
             Rectangle cameraBounds = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)bottomRight.X - (int)topLeft.X, (int)bottomRight.Y - (int)topLeft.Y);
             return cameraBounds;
