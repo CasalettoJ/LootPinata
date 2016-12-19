@@ -15,7 +15,7 @@ namespace LootPinata.Engine.Systems
         public static void GenerateRandomInventoryItemsForEntity(ref ECSContainer ecsContainer, Guid ownerId)
         {
             List<Guid> itemIds = new List<Guid>();
-            int numberOfItems = Constants.Random.Next(1, 20);
+            int numberOfItems = Constants.Random.Next(1, 90);
             for (int i = 0; i <= numberOfItems; i++)
             {
                 BaseEntity item = new BaseEntity(ComponentFlags.LABEL, ComponentFlags.DISPLAY);
@@ -64,12 +64,12 @@ namespace LootPinata.Engine.Systems
                 {
                     OriginPosition = ownerPosition.OriginPosition
                 };
-                int velocity = Constants.Random.Next(20, 250);
+                int velocity = Constants.Random.Next(50, 250);
                 itemChange.Movement = new Movement()
                 {
                     BaseVelocity = velocity,
                     MovementType = MovementType.DIRECTED,
-                    Velocity = velocity,
+                    Velocity = velocity * Constants.Random.Next(2, 6),
                     TargetPosition = ownerPosition.OriginPosition + new Vector2(Constants.Random.Next(-velocity, velocity), Constants.Random.Next(-velocity, velocity))
                 };
                 ecsContainer.AppendEntity(itemChange, id);

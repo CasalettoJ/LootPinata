@@ -35,13 +35,20 @@ namespace LootPinata.Engine.Systems
             positionInfo.OriginPosition = newPosition;
         }
 
-        public static void UpdateMovingEntities(Movement movement, Position position, GameTime gameTime)
+        public static void UpdateMovingEntities(Movement movement, Position position, GameTime gameTime, ref ECSContainer ecsContainer, Entity entity)
         {
             Vector2 Direction = Vector2.Normalize(movement.TargetPosition - position.OriginPosition);
             float distance = Math.Abs(Vector2.Distance(position.OriginPosition, movement.TargetPosition));
             if (distance > 10)
             {
                 position.OriginPosition += Direction * new Vector2((float)movement.Velocity) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else
+            {
+                ecsContainer.DelayedActions.Add(new Action(() =>
+                {
+                    entity.RemoveComponentFlags(ComponentFlags.MOVEMENT);
+                }));
             }
         }
     }

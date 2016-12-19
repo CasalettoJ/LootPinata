@@ -114,7 +114,7 @@ namespace LootPinata
             GraphicsDevice.Clear(Color.Bisque);
 
             // Draw Entities
-            this._spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: this._camera.CurrentMatrix, sortMode: SpriteSortMode.BackToFront);
+            this._spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: this._camera.CurrentMatrix, sortMode: SpriteSortMode.BackToFront | SpriteSortMode.Texture);
             this._currentState.DrawContent(this._spriteBatch, this._camera);
             this._spriteBatch.End();
 

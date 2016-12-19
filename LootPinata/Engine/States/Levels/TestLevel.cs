@@ -104,7 +104,7 @@ namespace LootPinata.Engine.States.Levels
                             MovementSystem.InputMovement(currentKey, prevKey, gameTime, this._components.Positions[c.Id], this._components.Movements[c.Id]);
                             break;
                         case MovementType.DIRECTED:
-                            MovementSystem.UpdateMovingEntities(this._components.Movements[c.Id], this._components.Positions[c.Id], gameTime);
+                            MovementSystem.UpdateMovingEntities(this._components.Movements[c.Id], this._components.Positions[c.Id], gameTime, ref this._components, c);
                             break;
                     }
                 }
