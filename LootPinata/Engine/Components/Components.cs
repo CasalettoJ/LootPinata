@@ -53,6 +53,24 @@ namespace LootPinata.Engine.Components
             return id;
         }
 
+        public void AppendEntity(BaseEntity additions, int id)
+        {
+            Entity entity = this.Entities.Where(x => x.Id == id).First();
+            if (entity != null && additions != null)
+            {
+                entity.AddComponentFlags(additions.Flags.ToArray());
+                if (additions.Position != null) { this.Positions.Add(id, additions.Position); }
+                if (additions.Movement != null) { this.Movements.Add(id, additions.Movement); }
+                if (additions.Label != null) { this.Labels.Add(id, additions.Label); }
+                if (additions.Display != null) { this.Displays.Add(id, additions.Display); }
+            }
+        }
+
+        public Entity GetEntity(int id)
+        {
+            return this.Entities.Where(x => x.Id == id).FirstOrDefault();
+        }
+
         public void DestroyEntity(int entityId)
         {
             this.Entities.RemoveAt(entityId);

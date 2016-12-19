@@ -11,6 +11,16 @@ namespace LootPinata.Engine.IO.ArkSystem
 {
     public static class ArkCreation
     {
+        public static int SpawnEntityWithOverrides(string xmlFilePath, ref ECSContainer ecsContainer, BaseEntity additions = null)
+        {
+            int id = ArkCreation.CreateEntityFromFile(xmlFilePath, ref ecsContainer);
+            if (additions != null)
+            {
+                ecsContainer.AppendEntity(additions, id);
+            }
+            return id;
+        }
+
         public static int CreateEntityFromFile(string xmlFilePath, ref ECSContainer ecsContainer)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(BaseEntity));

@@ -14,7 +14,6 @@ using LootPinata.Engine.IO.Settings;
 using LootPinata.Engine.States.Menus;
 using System.Xml.Serialization;
 using System.IO;
-using LootPinata.Ark.Monsters;
 using LootPinata.Engine.IO.ArkSystem;
 
 namespace LootPinata.Engine.States.Levels
@@ -36,105 +35,8 @@ namespace LootPinata.Engine.States.Levels
             this._components = new ECSContainer();
 
             #region Debug Creation
-            int playerId = Spawners.SpawnPlayer(ref this._components, new Position() { OriginPosition = new Vector2(0, 0) });
-            Spawners.SpawnTestNpc(ref this._components, new Position() { OriginPosition = new Vector2(0, 50) });
-            //int playerId = this._components.CreateEntity(ComponentFlags.IS_PLAYER, ComponentFlags.MOVEMENT, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
-            //this._components.AddComponent(playerId, new Movement() { BaseVelocity = 300, Velocity = 300, MovementType = MovementType.INPUT });
-            //this._components.AddComponent(playerId, new Position() { OriginPosition = new Vector2(0, 16), TileHeight = 32, TileWidth = 32 });
-            //this._components.AddComponent(playerId, new Display()
-            //{
-            //    Color = Color.Red,
-            //    Layer = DisplayLayer.FOREGROUND,
-            //    LayerDepth = 0,
-            //    Opacity = 1f,
-            //    Origin = new Vector2(16, 16),
-            //    Rotation = 0f,
-            //    Scale = 1f,
-            //    SpriteEffect = SpriteEffects.None,
-            //    SpriteSource = new Rectangle(0, 0, 32, 32)
-            //});
-
-            //int id = this._components.CreateEntity(ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
-            //this._components.Positions[id] = new Position() { OriginPosition = new Vector2(40, 16), TileHeight = 32, TileWidth = 32 };
-            //this._components.Displays[id] = new Display()
-            //{
-            //    Color = Color.Blue,
-            //    Layer = DisplayLayer.FOREGROUND,
-            //    LayerDepth = 0,
-            //    Opacity = 1f,
-            //    Origin = new Vector2(16, 16),
-            //    Rotation = 0f,
-            //    Scale = 1f,
-            //    SpriteEffect = SpriteEffects.None,
-            //    SpriteSource = new Rectangle(0, 0, 32, 32)
-            //};
-            //this._components.Labels[id] = new Label()
-            //{
-            //    Color = Color.Black,
-            //    Displacement = new Vector2(0, -7),
-            //    Origin = new Vector2(16, 16),
-            //    DistanceRenderBuffer = 100,
-            //    Rotation = 0f,
-            //    Scale = 1f,
-            //    SpriteEffect = SpriteEffects.None,
-            //    Text = "Pssst, come here kid!",
-            //    WhenToShow = WhenToShowLabel.PLAYER_CLOSE
-            //};
-
-            //id = this._components.CreateEntity(ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
-            //this._components.Positions[id] = new Position() { OriginPosition = new Vector2(26, 600), TileHeight = 32, TileWidth = 32 };
-            //this._components.Displays[id] = new Display()
-            //{
-            //    Color = Color.Blue,
-            //    Layer = DisplayLayer.FOREGROUND,
-            //    LayerDepth = 0,
-            //    Opacity = 1f,
-            //    Origin = new Vector2(16, 16),
-            //    Rotation = 0f,
-            //    Scale = 3f,
-            //    SpriteEffect = SpriteEffects.None,
-            //    SpriteSource = new Rectangle(0, 0, 32, 32)
-            //};
-            //this._components.Labels[id] = new Label()
-            //{
-            //    Color = Color.Black,
-            //    Displacement = new Vector2(0, -50),
-            //    Origin = new Vector2(16, 16),
-            //    DistanceRenderBuffer = 150,
-            //    Rotation = 25f,
-            //    Scale = 3f,
-            //    SpriteEffect = SpriteEffects.None,
-            //    Text = "Big nyan",
-            //    WhenToShow = WhenToShowLabel.PLAYER_CLOSE
-            //};
-
-            //id = this._components.CreateEntity(ComponentFlags.LABEL, ComponentFlags.POSITION, ComponentFlags.DISPLAY);
-            //this._components.Positions[id] = new Position() { OriginPosition = new Vector2(500, 10), TileHeight = 32, TileWidth = 32 };
-            //this._components.Displays[id] = new Display()
-            //{
-            //    Color = Color.Blue,
-            //    Layer = DisplayLayer.FOREGROUND,
-            //    LayerDepth = 0,
-            //    Opacity = 1f,
-            //    Origin = new Vector2(16, 16),
-            //    Rotation = 0f,
-            //    Scale = 1f,
-            //    SpriteEffect = SpriteEffects.None,
-            //    SpriteSource = new Rectangle(0, 0, 32, 32)
-            //};
-            //this._components.Labels[id] = new Label()
-            //{
-            //    Color = Color.Black,
-            //    Displacement = new Vector2(0, -5),
-            //    Origin = new Vector2(16, 16),
-            //    DistanceRenderBuffer = 100,
-            //    Rotation = 0f,
-            //    Scale = .55f,
-            //    SpriteEffect = SpriteEffects.None,
-            //    Text = "shy nyan",
-            //    WhenToShow = WhenToShowLabel.PLAYER_FAR
-            //};
-
+            int playerId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.Player, ref this._components, new BaseEntity(ComponentFlags.POSITION) {Position= new Position() { OriginPosition = new Vector2(0, 0) } });
+            ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.TestNpc, ref this._components, new BaseEntity(ComponentFlags.POSITION) { Position = new Position() { OriginPosition = new Vector2(0, 0) } });
             camera.TargetEntity = this._components.Entities[playerId].Id;
             #endregion
         }

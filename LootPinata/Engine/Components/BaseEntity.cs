@@ -8,7 +8,20 @@ namespace LootPinata.Engine.Components
 {
     public class BaseEntity
     {
-        public List<ComponentFlags> Flags;
+        public BaseEntity()
+        {
+
+        }
+
+        public BaseEntity(params ComponentFlags[] flags)
+        {
+            foreach(ComponentFlags flag in flags)
+            {
+                Flags.Add(flag);
+            }
+        }
+
+        public List<ComponentFlags> Flags { get; private set; } = new List<ComponentFlags>();
         public Movement Movement;
         public Position Position;
         public Display Display;

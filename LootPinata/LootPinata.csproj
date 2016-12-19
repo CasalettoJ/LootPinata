@@ -38,7 +38,6 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Ark\Monsters.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\Components\BaseEntity.cs" />
