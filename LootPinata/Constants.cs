@@ -55,5 +55,11 @@ namespace LootPinata
                 public static readonly string TestNpc = Ark.MonstersFolder + "TestNpc.xml";
             }
         }
+
+        public static class Loot
+        {
+            public const int MinimumDropFling = 50;
+            public const int MaximumDropFling = 250;
+        }
     }
 }

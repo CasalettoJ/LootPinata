@@ -64,7 +64,7 @@ namespace LootPinata.Engine.Systems
                 {
                     OriginPosition = ownerPosition.OriginPosition
                 };
-                int velocity = Constants.Random.Next(50, 250);
+                int velocity = Constants.Random.Next(Constants.Loot.MinimumDropFling, Constants.Loot.MaximumDropFling);
                 itemChange.Movement = new Movement()
                 {
                     BaseVelocity = velocity,
