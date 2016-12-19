@@ -53,6 +53,7 @@
     <Compile Include="Engine\States\Menus\SettingsState.cs" />
     <Compile Include="Engine\States\Menus\TitleState.cs" />
     <Compile Include="Engine\Systems\CameraSystem.cs" />
+    <Compile Include="Engine\Systems\CollisionSystem.cs" />
     <Compile Include="Engine\Systems\DisplaySystem.cs" />
     <Compile Include="Engine\Systems\InventorySystem.cs" />
     <Compile Include="Engine\Systems\MovementSystem.cs" />

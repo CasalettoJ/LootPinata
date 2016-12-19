@@ -27,5 +27,6 @@ namespace LootPinata.Engine.Components
         public Display Display;
         public Label Label;
         public Inventory Inventory;
+        public Collision Collision;
     }
 }

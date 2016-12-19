@@ -70,5 +70,10 @@ namespace LootPinata.Engine.Components
         {
             return (e.ComponentFlags[(int)ComponentFlags.MOVEMENT] && e.ComponentFlags[(int)ComponentFlags.POSITION]);
         }
+
+        public static bool IsCollidable(this Entity e)
+        {
+            return (e.ComponentFlags[(int)ComponentFlags.DISPLAY] && e.ComponentFlags[(int)ComponentFlags.POSITION] && e.ComponentFlags[(int)ComponentFlags.COLLISION]);
+        }
     }
 }

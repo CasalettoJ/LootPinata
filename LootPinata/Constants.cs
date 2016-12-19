@@ -61,5 +61,13 @@ namespace LootPinata
             public const int MinimumDropFling = 50;
             public const int MaximumDropFling = 250;
         }
+
+        public static class Systems
+        {
+            public static class Collision
+            {
+                public const int MapCellSize = 5;
+            }
+        }
     }
 }

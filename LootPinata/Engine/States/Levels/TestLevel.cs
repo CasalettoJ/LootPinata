@@ -111,9 +111,12 @@ namespace LootPinata.Engine.States.Levels
             });
 
             // Entity Information Updates
+            // Collision
+            CollisionSystem.CheckForCollisions(ref this._components);
 
             // Set up for next frame
             CameraSystem.UpdateCameraTarget(this._components, camera);
+            CollisionSystem.ResetCollisions(ref this._components);
             this._components.InvokeDelayedActions();
 
             return this;

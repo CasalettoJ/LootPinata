@@ -16,7 +16,8 @@ namespace LootPinata.Engine.Components
         LABEL = 2,
         DISPLAY = 3,
         MOVEMENT = 4,
-        INVENTORY = 5
+        INVENTORY = 5,
+        COLLISION = 6
     }
 
     public class ECSContainer
@@ -35,6 +36,7 @@ namespace LootPinata.Engine.Components
         public Dictionary<Guid, Movement> Movements = new Dictionary<Guid, Movement>();
         public Dictionary<Guid, Label> Labels = new Dictionary<Guid, Label>();
         public Dictionary<Guid, Inventory> Inventories = new Dictionary<Guid, Inventory>();
+        public Dictionary<Guid, Collision> Collisions = new Dictionary<Guid, Collision>();
 
         // Manager Properties
         public List<Action> DelayedActions { get; private set; } = new List<Action>();
@@ -54,6 +56,7 @@ namespace LootPinata.Engine.Components
             if (entity.Label != null) { this.Labels.Add(id, entity.Label); }
             if (entity.Display != null) { this.Displays.Add(id, entity.Display); }
             if (entity.Inventory != null) { this.Inventories.Add(id, entity.Inventory); }
+            if (entity.Collision != null) { this.Collisions.Add(id, entity.Collision); }
             return id;
         }
 
@@ -68,6 +71,7 @@ namespace LootPinata.Engine.Components
                 if (additions.Label != null) { this.Labels[id] = additions.Label; }
                 if (additions.Display != null) { this.Displays[id] = additions.Display; }
                 if (additions.Inventory != null) { this.Inventories[id] = additions.Inventory; }
+                if (additions.Collision != null) { this.Collisions[id] = additions.Collision; }
             }
         }
 
@@ -84,6 +88,7 @@ namespace LootPinata.Engine.Components
             this.Displays.Remove(removal.Id);
             this.Labels.Remove(removal.Id);
             this.Inventories.Remove(removal.Id);
+            this.Collisions.Remove(removal.Id);
         }
 
         public void DestroyEntity(Guid id)
@@ -91,12 +96,7 @@ namespace LootPinata.Engine.Components
             Entity found = this.Entities.Where(x => x.Id == id).FirstOrDefault();
             if (found != null)
             {
-                this.Entities.Remove(found);
-                this.Positions.Remove(found.Id);
-                this.Movements.Remove(found.Id);
-                this.Displays.Remove(found.Id);
-                this.Labels.Remove(found.Id);
-                this.Inventories.Remove(found.Id);
+                this.DestroyEntity(found);
             }
         }
 
@@ -182,6 +182,22 @@ namespace LootPinata.Engine.Components
     public class Inventory
     {
         public List<Guid> EntitiesOwned;
+    }
+
+    public enum CollisionType
+    {
+        NONE,
+        REACTOR,
+        ITEM,
+        DAMAGE,
+        EFFECT
+    }
+
+    public class Collision
+    {
+        public CollisionType CollisionType;
+        public List<Guid> CollidedEntities = new List<Guid>();
+        public bool Solid;
     }
     #endregion
 }

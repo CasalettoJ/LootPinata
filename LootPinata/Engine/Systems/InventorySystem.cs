@@ -59,7 +59,7 @@ namespace LootPinata.Engine.Systems
             Position ownerPosition = ecsContainer.Positions[ownerId];
             foreach(Guid id in ownerInventory.EntitiesOwned)
             {
-                BaseEntity itemChange = new BaseEntity(ComponentFlags.POSITION, ComponentFlags.MOVEMENT);
+                BaseEntity itemChange = new BaseEntity(ComponentFlags.POSITION, ComponentFlags.MOVEMENT, ComponentFlags.COLLISION);
                 itemChange.Position = new Position()
                 {
                     OriginPosition = ownerPosition.OriginPosition
@@ -71,6 +71,11 @@ namespace LootPinata.Engine.Systems
                     MovementType = MovementType.DIRECTED,
                     Velocity = velocity * Constants.Random.Next(2, 6),
                     TargetPosition = ownerPosition.OriginPosition + new Vector2(Constants.Random.Next(-velocity, velocity), Constants.Random.Next(-velocity, velocity))
+                };
+                itemChange.Collision = new Collision()
+                {
+                    CollisionType = CollisionType.ITEM,
+                    Solid = false
                 };
                 ecsContainer.AppendEntity(itemChange, id);
             }

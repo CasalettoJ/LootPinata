@@ -31,4 +31,8 @@
     <ComponentFlags>MOVEMENT</ComponentFlags>
     <ComponentFlags>DISPLAY</ComponentFlags>
   </Flags>
+  <Collision>
+    <CollisionType>REACTOR</CollisionType>
+    <Solid>true</Solid>
+  </Collision>
 </BaseEntity>
