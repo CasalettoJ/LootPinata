@@ -15,7 +15,7 @@ namespace LootPinata.Engine.Systems
         public static void GenerateRandomInventoryItemsForEntity(ref ECSContainer ecsContainer, Guid ownerId)
         {
             List<Guid> itemIds = new List<Guid>();
-            int numberOfItems = Constants.Random.Next(1, 90);
+            int numberOfItems = Constants.Random.Next(1, 15);
             for (int i = 0; i <= numberOfItems; i++)
             {
                 BaseEntity item = new BaseEntity(ComponentFlags.LABEL, ComponentFlags.DISPLAY);
@@ -75,7 +75,9 @@ namespace LootPinata.Engine.Systems
                 itemChange.Collision = new Collision()
                 {
                     CollisionType = CollisionType.ITEM,
-                    Solid = false
+                    Solid = false,
+                    CollisionHeightFromOrigin = Constants.Sprites.ItemGrid,
+                    CollisionWidthFromOrigin = Constants.Sprites.ItemGrid
                 };
                 ecsContainer.AppendEntity(itemChange, id);
             }

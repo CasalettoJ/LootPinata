@@ -87,7 +87,7 @@ namespace LootPinata.Engine.States.Levels
             {
                 this._components.DelayedActions.Add(new Action(() =>
                 {
-                    for (int i = 0; i < 100; i++)
+                    for (int i = 0; i < 10; i++)
                     {
                         Guid testId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.TestNpc, ref this._components, new BaseEntity(ComponentFlags.POSITION) { Position = new Position() { OriginPosition = new Vector2(Constants.Random.Next(0, 1000), Constants.Random.Next(0,1000)) } });
                         InventorySystem.GenerateRandomInventoryItemsForEntity(ref this._components, testId);

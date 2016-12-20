@@ -198,6 +198,8 @@ namespace LootPinata.Engine.Components
         public CollisionType CollisionType;
         public List<Guid> CollidedEntities = new List<Guid>();
         public bool Solid;
+        public int CollisionHeightFromOrigin;
+        public int CollisionWidthFromOrigin;
     }
     #endregion
 }
