@@ -21,6 +21,7 @@ namespace LootPinata
         {
             public static readonly string SpriteFolder = @"Sprites/";
             public static readonly string Placeholder = SpriteFolder + "placeholder";
+            public static readonly string PlaceHolderKey = "placeholder";
             public static readonly string Shieldbun = SpriteFolder + "shieldbunsprite";
             public static readonly string ItemSheet = SpriteFolder + "items";
             public static readonly string ItemSheetKey = "item";
@@ -66,7 +67,7 @@ namespace LootPinata
         {
             public static class Collision
             {
-                public const int MapCellSize = 5;
+                public const int MapCellSize = 50;
             }
         }
     }

@@ -32,6 +32,7 @@ namespace LootPinata.Engine.States.Levels
             _spriteSheets.Add(Constants.Sprites.MonsterSheetKey, _content.Load<Texture2D>(Constants.Sprites.MonsterSheet));
             _spriteSheets.Add(Constants.Sprites.ItemSheetKey, _content.Load<Texture2D>(Constants.Sprites.ItemSheet));
             _spriteSheets.Add(Constants.Sprites.TileSheetKey, _content.Load<Texture2D>(Constants.Sprites.TileSheet));
+            _spriteSheets.Add(Constants.Sprites.PlaceHolderKey, _content.Load<Texture2D>(Constants.Sprites.Placeholder));
             this._components = new ECSContainer();
 
             #region Debug Creation
@@ -45,18 +46,32 @@ namespace LootPinata.Engine.States.Levels
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
             Guid playerId = this._components.Entities.Where(c => c.HasComponents(ComponentFlags.IS_PLAYER)).FirstOrDefault().Id;
+            Dictionary<DisplayLayer,List<Action>> drawSequence = new Dictionary<DisplayLayer, List<Action>>();
+            drawSequence[DisplayLayer.BACKGROUND] = new List<Action>();
+            drawSequence[DisplayLayer.FLOOR] = new List<Action>();
+            drawSequence[DisplayLayer.FOREGROUND] = new List<Action>();
+            drawSequence[DisplayLayer.NORMAL] = new List<Action>();
+            drawSequence[DisplayLayer.SUPER] = new List<Action>();
+            drawSequence[DisplayLayer.TOP] = new List<Action>();
             // Draw Sprites
             this._components.Entities.ForEach((c) => 
             {
                 if (c.HasDrawableSprite())
                 {
-                    DisplaySystem.DisplayEntity(spriteBatch, camera, this._components.Displays[c.Id], this._components.Positions[c.Id], this._spriteSheets[this._components.Displays[c.Id].SpriteSheetKey]);
+                    drawSequence[this._components.Displays[c.Id].Layer].Add(new Action(() =>
+                    {
+                        DisplaySystem.DisplayEntity(spriteBatch, camera, this._components.Displays[c.Id], this._components.Positions[c.Id], this._spriteSheets[this._components.Displays[c.Id].SpriteSheetKey]);
+                    }));
                 }
                 if (c.HasDrawableLabel())
                 {
                     DisplaySystem.DisplayLabel(spriteBatch, camera, this._components.Displays[c.Id], this._components.Labels[c.Id], this._components.Positions[c.Id], _labelFont, this._components.Positions[playerId], this._components.Displays[playerId]);
                 }
             });
+            foreach(DisplayLayer key in drawSequence.Keys)
+            {
+                drawSequence[key].ForEach(x => x.Invoke());
+            }
         }
 
         public IState UpdateState(ref GameSettings gameSettings, GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
@@ -72,8 +87,11 @@ namespace LootPinata.Engine.States.Levels
             {
                 this._components.DelayedActions.Add(new Action(() =>
                 {
-                    Guid testId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.TestNpc, ref this._components, new BaseEntity(ComponentFlags.POSITION) { Position = new Position() { OriginPosition = this._components.Positions[playerId].OriginPosition } });
-                    InventorySystem.GenerateRandomInventoryItemsForEntity(ref this._components, testId);
+                    for (int i = 0; i < 100; i++)
+                    {
+                        Guid testId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.TestNpc, ref this._components, new BaseEntity(ComponentFlags.POSITION) { Position = new Position() { OriginPosition = new Vector2(Constants.Random.Next(0, 1000), Constants.Random.Next(0,1000)) } });
+                        InventorySystem.GenerateRandomInventoryItemsForEntity(ref this._components, testId);
+                    }
                 }));
             }
             if (currentKey.IsKeyDown(Keys.R) && prevKey.IsKeyUp(Keys.R))
