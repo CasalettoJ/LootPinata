@@ -30,9 +30,11 @@
     <ComponentFlags>IS_PLAYER</ComponentFlags>
     <ComponentFlags>MOVEMENT</ComponentFlags>
     <ComponentFlags>DISPLAY</ComponentFlags>
+    <ComponentFlags>COLLISION</ComponentFlags>
   </Flags>
   <Collision>
     <CollisionType>REACTOR</CollisionType>
     <Solid>true</Solid>
+    <CollisionRadius>24</CollisionRadius>
   </Collision>
 </BaseEntity>

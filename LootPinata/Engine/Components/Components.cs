@@ -171,12 +171,20 @@ namespace LootPinata.Engine.Components
         DIRECTED
     }
 
+    public enum TargetReachedBehavior
+    {
+        NONE,
+        DESTROY,
+        HIDE
+    }
+
     public class Movement
     {
         public double BaseVelocity;
         public double Velocity;
         public MovementType MovementType;
         public Vector2 TargetPosition;
+        public TargetReachedBehavior TargetReachedBehavior;
     } 
 
     public class Inventory
@@ -197,9 +205,9 @@ namespace LootPinata.Engine.Components
     {
         public CollisionType CollisionType;
         public List<Guid> CollidedEntities = new List<Guid>();
+        public List<Guid> CheckedEntities = new List<Guid>();
         public bool Solid;
-        public int CollisionHeightFromOrigin;
-        public int CollisionWidthFromOrigin;
+        public int CollisionRadius;
     }
     #endregion
 }

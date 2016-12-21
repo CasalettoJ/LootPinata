@@ -28,6 +28,8 @@ namespace LootPinata.Engine.States.Levels
         private DungeonTile[,] _dungeonGrid;
         private int _gridCols;
         private int _gridRows;
+        private List<Entity>[,] _collisionPartition;
+        private Dictionary<DisplayLayer, List<Action>> drawSequence = new Dictionary<DisplayLayer, List<Action>>();
 
         public TestLevel(ContentManager content, Camera camera)
         {
@@ -41,11 +43,18 @@ namespace LootPinata.Engine.States.Levels
             this._dungeonGrid = DungeonGenerationSystem.GenerateDungeon(150, 150);
             this._gridCols = this._dungeonGrid.GetLength(0);
             this._gridRows = this._dungeonGrid.GetLength(1);
+            this._collisionPartition = CollisionSystem.CreatePartitionGrid(this._gridCols, this._gridRows);
+            drawSequence[DisplayLayer.BACKGROUND] = new List<Action>();
+            drawSequence[DisplayLayer.FLOOR] = new List<Action>();
+            drawSequence[DisplayLayer.FOREGROUND] = new List<Action>();
+            drawSequence[DisplayLayer.NORMAL] = new List<Action>();
+            drawSequence[DisplayLayer.SUPER] = new List<Action>();
+            drawSequence[DisplayLayer.TOP] = new List<Action>();
 
             #region Debug Creation
-            Guid playerId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.Player, ref this._components, new BaseEntity(ComponentFlags.POSITION) {Position= new Position() { OriginPosition = new Vector2(0, 0) } });
-            Guid testId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.TestNpc, ref this._components, new BaseEntity(ComponentFlags.POSITION) { Position = new Position() { OriginPosition = new Vector2(0, 0) } });
-            InventorySystem.GenerateRandomInventoryItemsForEntity(ref this._components, testId);
+            Guid playerId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.Player, ref this._components, new BaseEntity(ComponentFlags.POSITION) {Position= new Position() { OriginPosition = new Vector2(20, 20) } });
+            Guid testId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.TestNpc, ref this._components, new BaseEntity(ComponentFlags.POSITION) { Position = new Position() { OriginPosition = new Vector2(20, 20) } });
+            InventorySystem.GenerateRandomInventoryItemsForEntity(this._components, testId);
             camera.TargetEntity = playerId;
             #endregion
         }
@@ -53,13 +62,6 @@ namespace LootPinata.Engine.States.Levels
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
             Guid playerId = this._components.Entities.Where(c => c.HasComponents(ComponentFlags.IS_PLAYER)).FirstOrDefault().Id;
-            Dictionary<DisplayLayer,List<Action>> drawSequence = new Dictionary<DisplayLayer, List<Action>>();
-            drawSequence[DisplayLayer.BACKGROUND] = new List<Action>();
-            drawSequence[DisplayLayer.FLOOR] = new List<Action>();
-            drawSequence[DisplayLayer.FOREGROUND] = new List<Action>();
-            drawSequence[DisplayLayer.NORMAL] = new List<Action>();
-            drawSequence[DisplayLayer.SUPER] = new List<Action>();
-            drawSequence[DisplayLayer.TOP] = new List<Action>();
             // Draw Dungeon
             DisplaySystem.DrawDungeon(camera, spriteBatch, this._dungeonGrid, this._spriteSheets[Constants.Sprites.TileSheetKey], this._gridCols, this._gridRows);
 
@@ -81,6 +83,7 @@ namespace LootPinata.Engine.States.Levels
             foreach(DisplayLayer key in drawSequence.Keys)
             {
                 drawSequence[key].ForEach(x => x.Invoke());
+                drawSequence[key].Clear();
             }
         }
 
@@ -103,9 +106,17 @@ namespace LootPinata.Engine.States.Levels
                 {
                     for (int i = 0; i < 10; i++)
                     {
-                        Guid testId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.TestNpc, ref this._components, new BaseEntity(ComponentFlags.POSITION) { Position = new Position() { OriginPosition = new Vector2(Constants.Random.Next(0, 1000), Constants.Random.Next(0,1000)) } });
-                        InventorySystem.GenerateRandomInventoryItemsForEntity(ref this._components, testId);
+                        Guid testId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.TestNpc, ref this._components, new BaseEntity(ComponentFlags.POSITION) { Position = new Position() { OriginPosition = new Vector2(Constants.Random.Next(20, this._gridCols * 48), Constants.Random.Next(0, this._gridRows * 48)) } });
+                        InventorySystem.GenerateRandomInventoryItemsForEntity(this._components, testId);
                     }
+                }));
+            }
+            if (currentKey.IsKeyDown(Keys.E) && prevKey.IsKeyUp(Keys.E))
+            {
+                this._components.DelayedActions.Add(new Action(() =>
+                {
+                        Guid testId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.TestNpc, ref this._components, new BaseEntity(ComponentFlags.POSITION) { Position = new Position() { OriginPosition = this._components.Positions[playerId].OriginPosition } });
+                        InventorySystem.GenerateRandomInventoryItemsForEntity(this._components, testId);
                 }));
             }
             if (currentKey.IsKeyDown(Keys.R) && prevKey.IsKeyUp(Keys.R))
@@ -113,7 +124,7 @@ namespace LootPinata.Engine.States.Levels
                 this._components.DelayedActions.Add(new Action(() =>
                 {
                     Guid id = this._components.Entities.Where(x => x.HasDrawableSprite() && !x.HasComponents(ComponentFlags.IS_PLAYER) && x.HasComponents(ComponentFlags.INVENTORY)).First().Id;
-                    InventorySystem.DropEntityInventory(ref this._components, id);
+                    InventorySystem.DropEntityInventory(this._components, id);
                     this._components.DestroyEntity(id);
                 }));
             }
@@ -136,7 +147,7 @@ namespace LootPinata.Engine.States.Levels
                             MovementSystem.InputMovement(currentKey, prevKey, gameTime, this._components.Positions[c.Id], this._components.Movements[c.Id]);
                             break;
                         case MovementType.DIRECTED:
-                            MovementSystem.UpdateMovingEntities(this._components.Movements[c.Id], this._components.Positions[c.Id], gameTime, ref this._components, c);
+                            MovementSystem.UpdateMovingEntities(this._components.Movements[c.Id], this._components.Positions[c.Id], gameTime, this._components, c);
                             break;
                     }
                 }
@@ -144,7 +155,8 @@ namespace LootPinata.Engine.States.Levels
 
             // Entity Information Updates
             // Collision
-            CollisionSystem.CheckForCollisions(ref this._components, this._dungeonGrid);
+            CollisionSystem.CheckForCollisions(this._components, this._collisionPartition);
+            CollisionSystem.HandleCollisions(this._components);
 
             // Set up for next frame
             CameraSystem.UpdateCameraTarget(this._components, camera);

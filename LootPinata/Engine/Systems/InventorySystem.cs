@@ -12,7 +12,7 @@ namespace LootPinata.Engine.Systems
     public static class InventorySystem
     {
         #region debug
-        public static void GenerateRandomInventoryItemsForEntity(ref ECSContainer ecsContainer, Guid ownerId)
+        public static void GenerateRandomInventoryItemsForEntity(ECSContainer ecsContainer, Guid ownerId)
         {
             List<Guid> itemIds = new List<Guid>();
             int numberOfItems = Constants.Random.Next(1, 15);
@@ -53,7 +53,7 @@ namespace LootPinata.Engine.Systems
             ecsContainer.AppendEntity(ownerAddition, ownerId);
         }
 
-        public static void DropEntityInventory(ref ECSContainer ecsContainer, Guid ownerId)
+        public static void DropEntityInventory(ECSContainer ecsContainer, Guid ownerId)
         {
             Inventory ownerInventory = ecsContainer.Inventories[ownerId];
             Position ownerPosition = ecsContainer.Positions[ownerId];
@@ -76,8 +76,7 @@ namespace LootPinata.Engine.Systems
                 {
                     CollisionType = CollisionType.ITEM,
                     Solid = false,
-                    CollisionHeightFromOrigin = Constants.Sprites.ItemGrid,
-                    CollisionWidthFromOrigin = Constants.Sprites.ItemGrid
+                    CollisionRadius = Constants.Sprites.ItemGrid * 3
                 };
                 ecsContainer.AppendEntity(itemChange, id);
             }
