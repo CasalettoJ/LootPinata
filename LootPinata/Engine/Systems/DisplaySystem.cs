@@ -50,27 +50,26 @@ namespace LootPinata.Engine.Systems
 
         public static void DrawDungeon(Camera camera, SpriteBatch spriteBatch, DungeonTile[,] grid, Texture2D spriteSheet, int cols, int rows)
         {
-            for(int i = 0; i < cols; i++)
-            {
-                for(int j = 0; j < rows; j++)
-                {
-                    if(camera.IsInView(GetCameraBounds(i*Constants.Tiles.TileScale*Constants.Sprites.TileGrid, j * Constants.Tiles.TileScale * Constants.Sprites.TileGrid, Constants.Sprites.TileGrid, Constants.Tiles.TileScale, camera)))
-                    {
-                        Rectangle sourceRect = new Rectangle();
-                        switch(grid[i,j].Type)
-                        {
-                            case TileType.TILE_FLOOR:
-                                sourceRect = new Rectangle(Constants.Tiles.FloorCol * Constants.Sprites.TileGrid, Constants.Tiles.FloorRow * Constants.Sprites.TileGrid, Constants.Sprites.TileGrid, Constants.Sprites.TileGrid);
-                                break;
-                            case TileType.TILE_WALL:
-                                sourceRect = new Rectangle(Constants.Tiles.WallCol * Constants.Sprites.TileGrid, Constants.Tiles.WallCol * Constants.Sprites.TileGrid, Constants.Sprites.TileGrid, Constants.Sprites.TileGrid);
-                                break;
-                        }
+            Rectangle gridTranslation = camera.TranslateToGrid(rows, cols, Constants.Sprites.TileGrid * Constants.Tiles.TileScale, 1);
 
-                        spriteBatch.Draw(spriteSheet,
-                            new Rectangle(i * Constants.Tiles.TileScale * Constants.Sprites.TileGrid, j * Constants.Tiles.TileScale * Constants.Sprites.TileGrid, Constants.Tiles.TileScale * Constants.Sprites.TileGrid, Constants.Tiles.TileScale * Constants.Sprites.TileGrid),
-                            sourceRect, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+            for (int i = gridTranslation.X; i < gridTranslation.Width; i++)
+            {
+                for(int j = gridTranslation.Y; j < gridTranslation.Height; j++)
+                {
+                    Rectangle sourceRect = new Rectangle();
+                    switch (grid[i, j].Type)
+                    {
+                        case TileType.TILE_FLOOR:
+                            sourceRect = new Rectangle(Constants.Tiles.FloorCol * Constants.Sprites.TileGrid, Constants.Tiles.FloorRow * Constants.Sprites.TileGrid, Constants.Sprites.TileGrid, Constants.Sprites.TileGrid);
+                            break;
+                        case TileType.TILE_WALL:
+                            sourceRect = new Rectangle(Constants.Tiles.WallCol * Constants.Sprites.TileGrid, Constants.Tiles.WallCol * Constants.Sprites.TileGrid, Constants.Sprites.TileGrid, Constants.Sprites.TileGrid);
+                            break;
                     }
+
+                    spriteBatch.Draw(spriteSheet,
+                        new Rectangle(i * Constants.Tiles.TileScale * Constants.Sprites.TileGrid, j * Constants.Tiles.TileScale * Constants.Sprites.TileGrid, Constants.Tiles.TileScale * Constants.Sprites.TileGrid, Constants.Tiles.TileScale * Constants.Sprites.TileGrid),
+                        sourceRect, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
                 }
             }
         }

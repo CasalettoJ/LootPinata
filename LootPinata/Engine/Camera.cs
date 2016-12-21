@@ -40,6 +40,26 @@ namespace LootPinata.Engine
             this.TargetPosition = this.Position;
         }
 
+        public Rectangle TranslateToGrid(int rows, int cols, int tileSize, int buffer = 0)
+        {
+            int cameraOffsetX = (int)this.Position.X / tileSize;
+            int cameraOffsetY = (int)this.Position.Y / tileSize;
+            int cameraWidth = this.Bounds.Width / tileSize;
+            int cameraHeight = this.Bounds.Height / tileSize;
+
+
+            int x = (cameraOffsetX - cameraWidth / 2) - buffer;
+            x = x < 0 ? 0 : x;
+            int y = (cameraOffsetY - cameraHeight / 2) - buffer;
+            y = y < 0 ? 0 : y;
+            int width = cameraOffsetX + (int)Math.Ceiling((double)cameraWidth / 2) + buffer;
+            width = width >= cols ? cols : width;
+            int height = cameraOffsetY + (int)Math.Ceiling((double)cameraHeight / 2) + buffer;
+            height = height >= rows ? rows : height;
+
+            return new Rectangle(x, y, width, height);
+        }
+
         public Matrix GetMatrix()
         {
             Matrix transform =

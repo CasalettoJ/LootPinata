@@ -38,7 +38,7 @@ namespace LootPinata.Engine.States.Levels
             _spriteSheets.Add(Constants.Sprites.TileSheetKey, _content.Load<Texture2D>(Constants.Sprites.TileSheet));
             _spriteSheets.Add(Constants.Sprites.PlaceHolderKey, _content.Load<Texture2D>(Constants.Sprites.Placeholder));
             this._components = new ECSContainer();
-            this._dungeonGrid = DungeonGenerationSystem.GenerateDungeon(50, 50);
+            this._dungeonGrid = DungeonGenerationSystem.GenerateDungeon(150, 150);
             this._gridCols = this._dungeonGrid.GetLength(0);
             this._gridRows = this._dungeonGrid.GetLength(1);
 
@@ -144,7 +144,7 @@ namespace LootPinata.Engine.States.Levels
 
             // Entity Information Updates
             // Collision
-            CollisionSystem.CheckForCollisions(ref this._components);
+            CollisionSystem.CheckForCollisions(ref this._components, this._dungeonGrid);
 
             // Set up for next frame
             CameraSystem.UpdateCameraTarget(this._components, camera);

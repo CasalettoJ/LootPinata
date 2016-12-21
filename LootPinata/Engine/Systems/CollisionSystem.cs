@@ -1,4 +1,5 @@
-﻿using LootPinata.Engine.Components;
+﻿using LootPinata.ArkContent.Dungeons;
+using LootPinata.Engine.Components;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace LootPinata.Engine.Systems
 {
     public static class CollisionSystem
     {
-        public static void CheckForCollisions(ref ECSContainer ecsContainer)
+        public static void CheckForCollisions(ref ECSContainer ecsContainer, DungeonTile[,] grid)
         {
 
         }
