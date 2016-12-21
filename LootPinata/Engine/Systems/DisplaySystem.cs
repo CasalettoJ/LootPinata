@@ -1,4 +1,5 @@
-﻿using LootPinata.Engine.Components;
+﻿using LootPinata.ArkContent.Dungeons;
+using LootPinata.Engine.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -47,10 +48,45 @@ namespace LootPinata.Engine.Systems
             }
         }
 
+        public static void DrawDungeon(Camera camera, SpriteBatch spriteBatch, DungeonTile[,] grid, Texture2D spriteSheet, int cols, int rows)
+        {
+            for(int i = 0; i < cols; i++)
+            {
+                for(int j = 0; j < rows; j++)
+                {
+                    if(camera.IsInView(GetCameraBounds(i*Constants.Tiles.TileScale*Constants.Sprites.TileGrid, j * Constants.Tiles.TileScale * Constants.Sprites.TileGrid, Constants.Sprites.TileGrid, Constants.Tiles.TileScale, camera)))
+                    {
+                        Rectangle sourceRect = new Rectangle();
+                        switch(grid[i,j].Type)
+                        {
+                            case TileType.TILE_FLOOR:
+                                sourceRect = new Rectangle(Constants.Tiles.FloorCol * Constants.Sprites.TileGrid, Constants.Tiles.FloorRow * Constants.Sprites.TileGrid, Constants.Sprites.TileGrid, Constants.Sprites.TileGrid);
+                                break;
+                            case TileType.TILE_WALL:
+                                sourceRect = new Rectangle(Constants.Tiles.WallCol * Constants.Sprites.TileGrid, Constants.Tiles.WallCol * Constants.Sprites.TileGrid, Constants.Sprites.TileGrid, Constants.Sprites.TileGrid);
+                                break;
+                        }
+
+                        spriteBatch.Draw(spriteSheet,
+                            new Rectangle(i * Constants.Tiles.TileScale * Constants.Sprites.TileGrid, j * Constants.Tiles.TileScale * Constants.Sprites.TileGrid, Constants.Tiles.TileScale * Constants.Sprites.TileGrid, Constants.Tiles.TileScale * Constants.Sprites.TileGrid),
+                            sourceRect, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+                    }
+                }
+            }
+        }
+
         private static Rectangle GetCameraBounds(Display displayInfo, Position positionInfo, Camera camera)
         {
             Vector2 bottomRight = Vector2.Transform(new Vector2((positionInfo.OriginPosition.X) + (displayInfo.SpriteSheetSize * displayInfo.Scale), (positionInfo.OriginPosition.Y) + (displayInfo.SpriteSheetSize * displayInfo.Scale)), camera.CurrentMatrix);
             Vector2 topLeft = Vector2.Transform(new Vector2(positionInfo.OriginPosition.X, positionInfo.OriginPosition.Y), camera.CurrentMatrix);
+            Rectangle cameraBounds = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)bottomRight.X - (int)topLeft.X, (int)bottomRight.Y - (int)topLeft.Y);
+            return cameraBounds;
+        }
+
+        private static Rectangle GetCameraBounds(int posX, int posY, int size, int scale, Camera camera)
+        {
+            Vector2 bottomRight = Vector2.Transform(new Vector2((posX) + (size * scale), (posY) + (size * scale)), camera.CurrentMatrix);
+            Vector2 topLeft = Vector2.Transform(new Vector2(posX, posY), camera.CurrentMatrix);
             Rectangle cameraBounds = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)bottomRight.X - (int)topLeft.X, (int)bottomRight.Y - (int)topLeft.Y);
             return cameraBounds;
         }

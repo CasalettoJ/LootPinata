@@ -44,6 +44,16 @@ namespace LootPinata
             }
         }
 
+        public static class Tiles
+        {
+            public const int FloorCol = 5;
+            public const int FloorRow = 12;
+            public const int WallCol = 1;
+            public const int WallRow = 5;
+            public const int TileScale = 2;
+        }
+
+
         public static class Ark
         {
             public const string ArkFolder = @"ArkContent/";

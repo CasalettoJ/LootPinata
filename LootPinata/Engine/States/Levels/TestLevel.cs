@@ -15,6 +15,7 @@ using LootPinata.Engine.States.Menus;
 using System.Xml.Serialization;
 using System.IO;
 using LootPinata.Engine.IO.ArkSystem;
+using LootPinata.ArkContent.Dungeons;
 
 namespace LootPinata.Engine.States.Levels
 {
@@ -24,6 +25,9 @@ namespace LootPinata.Engine.States.Levels
         private SpriteFont _labelFont;
         private ECSContainer _components;
         private ContentManager _content;
+        private DungeonTile[,] _dungeonGrid;
+        private int _gridCols;
+        private int _gridRows;
 
         public TestLevel(ContentManager content, Camera camera)
         {
@@ -34,6 +38,9 @@ namespace LootPinata.Engine.States.Levels
             _spriteSheets.Add(Constants.Sprites.TileSheetKey, _content.Load<Texture2D>(Constants.Sprites.TileSheet));
             _spriteSheets.Add(Constants.Sprites.PlaceHolderKey, _content.Load<Texture2D>(Constants.Sprites.Placeholder));
             this._components = new ECSContainer();
+            this._dungeonGrid = DungeonGenerationSystem.GenerateDungeon(50, 50);
+            this._gridCols = this._dungeonGrid.GetLength(0);
+            this._gridRows = this._dungeonGrid.GetLength(1);
 
             #region Debug Creation
             Guid playerId = ArkCreation.SpawnEntityWithOverrides(Constants.Ark.Monsters.Player, ref this._components, new BaseEntity(ComponentFlags.POSITION) {Position= new Position() { OriginPosition = new Vector2(0, 0) } });
@@ -53,6 +60,9 @@ namespace LootPinata.Engine.States.Levels
             drawSequence[DisplayLayer.NORMAL] = new List<Action>();
             drawSequence[DisplayLayer.SUPER] = new List<Action>();
             drawSequence[DisplayLayer.TOP] = new List<Action>();
+            // Draw Dungeon
+            DisplaySystem.DrawDungeon(camera, spriteBatch, this._dungeonGrid, this._spriteSheets[Constants.Sprites.TileSheetKey], this._gridCols, this._gridRows);
+
             // Draw Sprites
             this._components.Entities.ForEach((c) => 
             {
@@ -81,6 +91,10 @@ namespace LootPinata.Engine.States.Levels
             if (currentKey.IsKeyDown(Keys.Escape) && prevKey.IsKeyUp(Keys.Escape))
             {
                 return new PauseState(this._content, this);
+            }
+            if (currentKey.IsKeyDown(Keys.Q) && prevKey.IsKeyUp(Keys.Q))
+            {
+                return new TestLevel(this._content, camera);
             }
 
             if (currentKey.IsKeyDown(Keys.F) && prevKey.IsKeyUp(Keys.F))
