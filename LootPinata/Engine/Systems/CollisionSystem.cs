@@ -63,7 +63,7 @@ namespace LootPinata.Engine.Systems
                                 Collision collisionTwo = ecsContainer.Collisions[entityTwo.Id];
                                 Position positionTwo = ecsContainer.Positions[entityTwo.Id];
 
-                                if (!collisionOne.CheckedEntities.Contains(entityTwo.Id) && !collisionTwo.CheckedEntities.Contains(entityOne.Id))
+                                if (!collisionOne.CheckedEntities.Contains(entityTwo.Id) && !collisionTwo.CheckedEntities.Contains(entityOne.Id) && (collisionOne.CollisionType == CollisionType.REACTOR || collisionTwo.CollisionType == CollisionType.REACTOR))
                                 {
                                     Rectangle one = new Rectangle((int)positionOne.OriginPosition.X - collisionOne.CollisionRadius, (int)positionOne.OriginPosition.Y - collisionOne.CollisionRadius, collisionOne.CollisionRadius * 2, collisionOne.CollisionRadius * 2);
                                     Rectangle two = new Rectangle((int)positionTwo.OriginPosition.X - collisionTwo.CollisionRadius, (int)positionTwo.OriginPosition.Y - collisionTwo.CollisionRadius, collisionTwo.CollisionRadius * 2, collisionTwo.CollisionRadius * 2);

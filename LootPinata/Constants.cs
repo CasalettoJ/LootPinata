@@ -77,7 +77,7 @@ namespace LootPinata
         {
             public static class Collision
             {
-                public const int MapCellSize = 150;
+                public const int MapCellSize = 75;
             }
         }
     }
