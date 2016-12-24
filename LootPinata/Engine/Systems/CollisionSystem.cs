@@ -69,14 +69,8 @@ namespace LootPinata.Engine.Systems
                                     Rectangle two = new Rectangle((int)positionTwo.OriginPosition.X - collisionTwo.CollisionRadius, (int)positionTwo.OriginPosition.Y - collisionTwo.CollisionRadius, collisionTwo.CollisionRadius * 2, collisionTwo.CollisionRadius * 2);
                                     if (one.Intersects(two))
                                     {
-                                        if (!collisionOne.CollidedEntities.Contains(entityTwo.Id))
-                                        {
                                             collisionOne.CollidedEntities.Add(entityTwo.Id);
-                                        }
-                                        if (!collisionTwo.CollidedEntities.Contains(entityOne.Id))
-                                        {
                                             collisionTwo.CollidedEntities.Add(entityOne.Id);
-                                        }
                                     }
                                     collisionOne.CheckedEntities.Add(entityTwo.Id);
                                     collisionTwo.CheckedEntities.Add(entityOne.Id);

@@ -125,7 +125,7 @@ namespace LootPinata
 
             // Draw Debug
             this._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            this._spriteBatch.DrawString(this._debugText, "FPS: " + Math.Round((1 / (decimal)gameTime.ElapsedGameTime.TotalSeconds), 2).ToString(), new Vector2(25, 25), Color.DarkBlue);
+            this._spriteBatch.DrawString(this._debugText, "FPS: " + Math.Round((1 / (decimal)gameTime.ElapsedGameTime.TotalSeconds), 2).ToString(), new Vector2(25, 25), Color.White);
             this._spriteBatch.End();
 
             base.Draw(gameTime);
