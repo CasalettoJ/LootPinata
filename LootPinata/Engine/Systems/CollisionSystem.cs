@@ -37,15 +37,19 @@ namespace LootPinata.Engine.Systems
                 Vector2 gridSW = SpatialGridPosition(sw);
                 Vector2 gridSE = SpatialGridPosition(se);
 
-                if (partitionGrid[(int)gridNW.X, (int)gridNW.Y] == null)
+                AddToBucket(ref partitionGrid, gridNW, entity);
+                if (gridNE != gridNW)
                 {
-                    partitionGrid[(int)gridNW.X, (int)gridNW.Y] = new List<Entity>();
+                    AddToBucket(ref partitionGrid, gridNE, entity);
                 }
-
-                AddToBucket(ref partitionGrid, gridNW, entity);
-                AddToBucket(ref partitionGrid, gridNW, entity);
-                AddToBucket(ref partitionGrid, gridSE, entity);
-                AddToBucket(ref partitionGrid, gridSW, entity);
+                if (gridSE != gridNW && gridSE != gridNE)
+                {
+                    AddToBucket(ref partitionGrid, gridSE, entity);
+                }
+                if (gridSW != gridSE && gridSW != gridNW && gridSW != gridNE)
+                {
+                    AddToBucket(ref partitionGrid, gridSW, entity);
+                }
             }
 
             foreach(List<Entity> entitiesInCell in partitionGrid)
@@ -54,18 +58,19 @@ namespace LootPinata.Engine.Systems
                 {
                     foreach (Entity entityOne in entitiesInCell)
                     {
+                        Collision collisionOne = ecsContainer.Collisions[entityOne.Id];
+                        Position positionOne = ecsContainer.Positions[entityOne.Id];
+                        Rectangle one = new Rectangle((int)positionOne.OriginPosition.X - collisionOne.CollisionRadius, (int)positionOne.OriginPosition.Y - collisionOne.CollisionRadius, collisionOne.CollisionRadius * 2, collisionOne.CollisionRadius * 2);
+
                         foreach (Entity entityTwo in entitiesInCell)
                         {
                             if (entityOne != entityTwo)
                             {
-                                Collision collisionOne = ecsContainer.Collisions[entityOne.Id];
-                                Position positionOne = ecsContainer.Positions[entityOne.Id];
                                 Collision collisionTwo = ecsContainer.Collisions[entityTwo.Id];
                                 Position positionTwo = ecsContainer.Positions[entityTwo.Id];
 
-                                if (!collisionOne.CheckedEntities.Contains(entityTwo.Id) && !collisionTwo.CheckedEntities.Contains(entityOne.Id) && (collisionOne.CollisionType == CollisionType.REACTOR || collisionTwo.CollisionType == CollisionType.REACTOR))
+                                if (!collisionOne.CheckedEntities.Contains(entityTwo.Id) && (collisionOne.CollisionType == CollisionType.REACTOR || collisionTwo.CollisionType == CollisionType.REACTOR))
                                 {
-                                    Rectangle one = new Rectangle((int)positionOne.OriginPosition.X - collisionOne.CollisionRadius, (int)positionOne.OriginPosition.Y - collisionOne.CollisionRadius, collisionOne.CollisionRadius * 2, collisionOne.CollisionRadius * 2);
                                     Rectangle two = new Rectangle((int)positionTwo.OriginPosition.X - collisionTwo.CollisionRadius, (int)positionTwo.OriginPosition.Y - collisionTwo.CollisionRadius, collisionTwo.CollisionRadius * 2, collisionTwo.CollisionRadius * 2);
                                     if (one.Intersects(two))
                                     {
@@ -104,6 +109,7 @@ namespace LootPinata.Engine.Systems
             {
                 partitionGrid[(int)position.X, (int)position.Y] = new List<Entity>();
             }
+
             partitionGrid[(int)position.X, (int)position.Y].Add(entity);
         }
 

@@ -205,7 +205,7 @@ namespace LootPinata.Engine.Components
     {
         public CollisionType CollisionType;
         public List<Guid> CollidedEntities = new List<Guid>();
-        public List<Guid> CheckedEntities = new List<Guid>();
+        public HashSet<Guid> CheckedEntities = new HashSet<Guid>();
         public bool Solid;
         public int CollisionRadius;
     }
